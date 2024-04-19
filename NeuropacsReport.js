@@ -147,11 +147,9 @@ class NeuropacsReport{
             g.rect({x:190, y:60, width:90, height:30, stroke:'black',fill:'none'});
             g.text({'font-family':'sans-serif','font-size':'18px',x:235,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
 
-            let val1=percent;
-            let val2=100-percent;
-            let clr1='rgb(248 177 18)';
-            let clr2='gray'
-            if(val1<val2){
+            let clr1='gray';
+            let clr2='rgb(248 177 18)';
+            if(percent>50){
                 let tmp=clr2;
                 clr2=clr1;
                 clr1=tmp;
@@ -186,52 +184,7 @@ class NeuropacsReport{
 
         svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
 
-        /*if(entry.PD<50){
-            svg.ellipse({cx:50,cy:50,rx:20,ry:20,stroke:'black',fill:'gray'});
-            svg.text({'font-family':'sans-serif','font-size':'20px','font-weight':'bold',x:45,y:55,'fill':'white'},'1');
-
-        
-            svg.ellipse({cx:130,cy:150,rx:20,ry:20,stroke:'black',fill:'gray'});
-            svg.text({'font-family':'sans-serif','font-size':'20px','font-weight':'bold',x:125,y:155,'fill':'white'},'2');
-
-            //let g=svg.group({'transform':'translate(35,100) scale(3,3)'});
-            //g.polygon({'points':"15,12 22,17 15,22",'fill':'gray'});
-            //g.path({'d':"M4,2v9c0,3.3,2.7,6,6,6h8",'fill':"none", 'stroke':"gray", 'stroke-miterlimit':"10", 'stroke-width':"4"});
-        }
-        svg.text({'font-family':'sans-serif','font-size':'18px',x:100,y:50},'PD vs. Atypical Parkinsonism');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:200,y:70},'(MSA,PSP)');
-
-        
-        svg.text({'font-family':'sans-serif','font-size':'18px',x:180,y:150},'MSA vs. PSP');
        
-        let v=entry.PD;
-        let c1='gray';
-        let c2='rgb(248 177 18)';
-        if(v>50){let t=c2;c2=c1;c1=t;}
-
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:375,y:30},'PD');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:410+v*150/100,y:30},''+Math.floor(v)+'%');
-        svg.rect({x:400, y:5, width:v*150/100,height:40,stroke:'black',fill:c1});
-        v=100-entry.PD;
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:370,y:65},'MSA');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:370,y:80},'PSP');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:410+v*150/100,y:75},''+Math.floor(v)+'%');
-        svg.rect({x:400, y:50, width:v*150/100,height:40,stroke:'black',fill:c2});
-        
-        
-        v=entry.MSA;
-        c1='gray';
-        c2='rgb(248 177 18)';
-        if(v>50){let t=c2;c2=c1;c1=t;}
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:370,y:130},'MSA');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:410+v*150/100,y:130},''+Math.floor(v)+'%');
-        svg.rect({x:400, y:105, width:v*150/100,height:40,stroke:'black',fill:c1});
-        v=100-entry.MSA;
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:370,y:175},'PSP');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:410+v*150/100,y:175},''+Math.floor(v)+'%');
-        svg.rect({x:400, y:150, width:v*150/100,height:40,stroke:'black',fill:c2});
-        
-*/
         ai_box.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
         let ai_box2=document.createElement('div');
@@ -246,13 +199,7 @@ class NeuropacsReport{
 			}
 		);
 
-        /*if(entry.PD>50)
-            ai_box2.appendChild(this.newField({top:'0%',height:'50%',name:'Predicted Diagnosis: PD'}));
-        else if(entry.MSA>50)
-            ai_box2.appendChild(this.newField({top:'0%',height:'50%',name:'Predicted Diagnosis: MSA'}));
-        else ai_box2.appendChild(this.newField({top:'0%',height:'50%',name:'Predicted Diagnosis: PSP'}));*/
-
-   
+       
         ai_box2.appendChild(this.newField({top:'0%',height:'100%',name:'Biomarker Levels'}));
 
         let ai_box3=document.createElement('div');
