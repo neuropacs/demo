@@ -218,6 +218,7 @@ popLayout.setPosition('left');
 	popLayout.append(new Label("Product Selection"));
 	popLayout.append(new Button("PD/MSA/PSP")).whenClicked().then(()=>{
 		popLayout.hide();
+
 		let window=new Window();
 		wind.getWindowContainer().append(window);
 		new PDMSAPSPrequest(window).setCallback((index)=>{
