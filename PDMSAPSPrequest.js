@@ -23,8 +23,10 @@ class PDMSAPSPrequest{
 
 		h.append(new Button("Upload MRI")).whenClicked().then(()=>{
 			if(ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected())
-			split_top.getFirstContainer().removeAll();
-			ulpoading_window();
+			{
+				split_top.getFirstContainer().removeAll();
+				ulpoading_window();
+			}
 		});
 
 		split_top.getFirstContainer().append(h);
