@@ -80,7 +80,7 @@ var main=function(){
                                 o=JSON.parse(o);
                                 console.log(o)
                                 this.PD=100-o.result.MSAPSPvsPD;
-                                this.MSA=o.result.PSPvsMSA;
+                                this.MSA=100-o.result.PSPvsMSA;
                                 this.ROIs=[o.result.FWpSN, o.result.FWPutamen, o.result.FWSCP, o.result.FWMCP];
                                 let w=new Window();
                                  options.windowContainer.append(w);

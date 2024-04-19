@@ -180,9 +180,9 @@ class NeuropacsReport{
              g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2.replace('/',' or '))+' diagnosis.');
         }
 
-        draw_classifier(svg.group(),10,'PD','MSA/PSP');
+        draw_classifier(svg.group(),entry.PD,'PD','MSA/PSP');
 
-        draw_classifier(svg.group({transform:'translate(300 0)'}),80,'MSA','PSP');
+        draw_classifier(svg.group({transform:'translate(300 0)'}),entry.MSA,'MSA','PSP');
 
         svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
 
