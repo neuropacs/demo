@@ -18,10 +18,11 @@ var main=function(){
             this.MSA=Math.floor(Math.random()*100);
             this.MSA=9.5;
             this.ROIs=[];for(let i=0;i<4;i++)this.ROIs[i]=Math.random()*3;
-            this.ROIs=[2.7, 2.3, 2.8, 2.15];
-            this.ROIc=[0.8, 0.7, 0.7, 0.3];
-            this.ROImin=[0.75, 0.65, 0.65, 0.25];
-            this.ROImax=[0.9, 0.85, 0.75, 0.4];
+            this.ROIs=[0,0,0,0];
+            this.ROIc=[0.18188,0.18311,0.304532,0.081161];
+            let std=[0.08478,0.095479,0.098471,0.086772];
+            this.ROImin=[this.ROIc[0]+std[0],this.ROIc[1]+std[1],this.ROIc[2]+std[2],this.ROIc[3]+std[3]];
+            this.ROImax=[this.ROIc[0]-std[0],this.ROIc[1]-std[1],this.ROIc[2]-std[2],0];
 
             let v=new VerticalLayout();
             this.id_label=v.append(new Label(""));

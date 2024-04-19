@@ -81,7 +81,7 @@ class NeuropacsReport{
 			}
 		);
 
-        header_text2.innerHTML='Imaging Biomarker Report';
+        header_text2.innerHTML='neuropacs - Classification Report';
 
 
         let metadata_box=document.createElement('div');
@@ -92,14 +92,18 @@ class NeuropacsReport{
 				top:"8%",
 				left:"0%",
 				right:"35%",
-				height:"27%"
+				height:"10%"
 			}
 		);
 
-        metadata_box.appendChild(this.newField({top:'0%',height:'25%',name:'Order ID: '+entry.id_label.text}));
-        metadata_box.appendChild(this.newField({top:'25%',height:'25%',name:'Date (yyyy-mm-dd): '+entry.date_label.text}));
+        metadata_box.appendChild(this.newField({top:'0%',height:'33%',name:'Report ID: '+entry.id}));
+        let date=new Date(entry.cloudObject.info.uploadDate);
+        let month=date.getMonth();if(month<10)month="0"+month;
+        let day=date.getDate();if(day<10)day="0"+day;
+
+        metadata_box.appendChild(this.newField({top:'33%',height:'33%',name:'Date (yyyy-mm-dd): '+date.getFullYear()+'-'+month+'-'+day}));
         //metadata_box.appendChild(this.newField({top:'50%',height:'25%',name:'Clinical Data: '}));
-        metadata_box.appendChild(this.newField({top:'75%',height:'25%',name:'Prediction Results'}));
+        //metadata_box.appendChild(this.newField({top:'66%',height:'33%',name:'Prediction Results'}));
 
         let qr_box=document.createElement('div');
         area.appendChild(qr_box);
@@ -119,19 +123,70 @@ class NeuropacsReport{
         opn.set(ai_box.style,
 			{
                 position:'absolute',
-				top:"35%",
+				top:"18%",
 				left:"0%",
 				right:"0%",
-				height:"25%",
+				height:"50%",
                 backgroundSize:'contain',
                 backgroundRepeat:'no-repeat',
                 backgroundPosition:'center center'
 			}
 		);
-        var svg=new SVG({width:600,height:200});
+        var svg=new SVG({width:600,height:400});
     	//svg.rect({width:600,height:200,stroke:'black',fill:'none'});
 
-        if(entry.PD<50){
+
+        let draw_classifier=(g,percent,C1,C2)=>{
+
+            g.rect({x:10, y:10, width:280, height:370, stroke:'black',fill:'none'});
+        
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Classification between');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
+
+            g.text({'font-family':'sans-serif','font-size':'18px',x:20,y:80},'Classification Result:');
+            g.rect({x:190, y:60, width:90, height:30, stroke:'black',fill:'none'});
+            g.text({'font-family':'sans-serif','font-size':'18px',x:235,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
+
+            let val1=percent;
+            let val2=100-percent;
+            let clr1='rgb(248 177 18)';
+            let clr2='gray'
+            if(val1<val2){
+                let tmp=clr2;
+                clr2=clr1;
+                clr1=tmp;
+            }
+            g.ellipse({cx:150,cy:200,rx:100,ry:100,stroke:'black',fill:clr2});
+            
+            let points='150 200';
+            for(let i=-percent/2;i<=percent/2;i++){
+                let x=150+100*Math.cos(2*i*Math.PI/100+Math.PI);
+                let y=200+100*Math.sin(2*i*Math.PI/100+Math.PI);
+                points+=' '+Math.round(x)+' '+Math.round(y);
+            }
+            points+=' 150 200';
+            let options={points, fill:clr1,stroke:'black'}
+            g.polyline(options);
+
+            let t=C1.replace('/',' or ').split(' ')
+            for(let i=0;i<t.length;i++)
+              g.text({'font-family':'sans-serif','font-size':'12px',x:20,y:200+i*14},t[i]);
+            t=C2.replace('/',' or ').split(' ')
+            for(let i=0;i<t.length;i++)
+             g.text({'font-family':'sans-serif','font-size':'12px',x:255,y:200+i*14},t[i]);
+
+             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
+             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
+             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2.replace('/',' or '))+' diagnosis.');
+        }
+
+        draw_classifier(svg.group(),10,'PD','MSA/PSP');
+
+        draw_classifier(svg.group({transform:'translate(300 0)'}),80,'MSA','PSP');
+
+        svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
+
+        /*if(entry.PD<50){
             svg.ellipse({cx:50,cy:50,rx:20,ry:20,stroke:'black',fill:'gray'});
             svg.text({'font-family':'sans-serif','font-size':'20px','font-weight':'bold',x:45,y:55,'fill':'white'},'1');
 
@@ -176,7 +231,7 @@ class NeuropacsReport{
         svg.text({'font-family':'sans-serif','font-size':'12px',x:410+v*150/100,y:175},''+Math.floor(v)+'%');
         svg.rect({x:400, y:150, width:v*150/100,height:40,stroke:'black',fill:c2});
         
-
+*/
         ai_box.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
         let ai_box2=document.createElement('div');
@@ -184,10 +239,10 @@ class NeuropacsReport{
         opn.set(ai_box2.style,
 			{
                 position:'absolute',
-				top:"60%",
+				top:"68%",
 				left:"0%",
 				right:"0%",
-				height:"15%"
+				height:"7.5%"
 			}
 		);
 
@@ -198,7 +253,7 @@ class NeuropacsReport{
         else ai_box2.appendChild(this.newField({top:'0%',height:'50%',name:'Predicted Diagnosis: PSP'}));*/
 
    
-        ai_box2.appendChild(this.newField({top:'50%',height:'50%',name:'Biomarker Levels'}));
+        ai_box2.appendChild(this.newField({top:'0%',height:'100%',name:'Biomarker Levels'}));
 
         let ai_box3=document.createElement('div');
         area.appendChild(ai_box3);
