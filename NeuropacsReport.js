@@ -154,33 +154,35 @@ class NeuropacsReport{
                 clr2=clr1;
                 clr1=tmp;
             }
-            g.ellipse({cx:150,cy:200,rx:100,ry:100,stroke:'black',fill:clr2});
-            
-            let points='150 200';
+
+
+            let cx=150;
+            let cy=200;
+            let r=70;
+            g.ellipse({cx,cy,rx:r,ry:r,stroke:'black',fill:clr2});
+
+            let points=''+cx+' '+cy;
             for(let i=-percent/2;i<=percent/2;i++){
-                let x=150+100*Math.cos(2*i*Math.PI/100+Math.PI);
-                let y=200+100*Math.sin(2*i*Math.PI/100+Math.PI);
+                let x=cx+r*Math.cos(2*i*Math.PI/100+Math.PI);
+                let y=cy+r*Math.sin(2*i*Math.PI/100+Math.PI);
                 points+=' '+Math.round(x)+' '+Math.round(y);
             }
-            points+=' 150 200';
+            points+=' '+cx+' '+cy;
             let options={points, fill:clr1,stroke:'black'}
             g.polyline(options);
 
-            let t=C1.replace('/',' or ').split(' ')
-            for(let i=0;i<t.length;i++)
-              g.text({'font-family':'sans-serif','font-size':'12px',x:20,y:200+i*14},t[i]);
-            t=C2.replace('/',' or ').split(' ')
-            for(let i=0;i<t.length;i++)
-             g.text({'font-family':'sans-serif','font-size':'12px',x:255,y:200+i*14},t[i]);
+           
+            g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx-r-(cx-r-10)/2,y:205},C1);
+            g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:205},C2);
 
-             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
-             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2.replace('/',' or '))+' diagnosis.');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2.replace('/',' or '))+' diagnosis.');
         }
 
-        draw_classifier(svg.group(),entry.PD,'PD','MSA/PSP');
+        draw_classifier(svg.group(),100-entry.MSAPSPvsPD,'PD','MSA/PSP');
 
-        draw_classifier(svg.group({transform:'translate(300 0)'}),entry.MSA,'MSA','PSP');
+        draw_classifier(svg.group({transform:'translate(300 0)'}),100-entry.PSPvsMSA,'MSA','PSP');
 
         svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
 
@@ -230,64 +232,38 @@ class NeuropacsReport{
         svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:102},'0.25');
         svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:52},'0.75');
         svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:10},'1.0');
-        let max=1.0;
+        
 
+        let ROIc={
+            FWMCP:{avg:0.073751,std:0.02591},
+            FWPutamen:{avg:0.176522,std:0.061003},
+            FWSCP:{avg:0.298924,std:0.076232},
+            FWpSN:{avg:0.175282,std:0.04196},
+        };
+
+        let max=1.0;
         let color1='green';
         let color2='rgb(158, 206, 220)';
-        let value=entry.ROIc[0];
+
+        let x=55;
         let w=23;
-        svg.rect({x:55,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color1});
+        for(let region in entry.ROIs)
+        {
+            let value=ROIc[region].avg;
 
-        svg.line({x1:55+w/2,y1:150*(max-entry.ROImin[0])/max,x2:55+w/2,y2:150*(max-entry.ROImax[0])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:55+w/4,y1:150*(max-entry.ROImin[0])/max,x2:55+w*3/4,y2:150*(max-entry.ROImin[0])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:55+w/4,y1:150*(max-entry.ROImax[0])/max,x2:55+w*3/4,y2:150*(max-entry.ROImax[0])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-
-        value=entry.ROIs[0];
-        svg.rect({x:55+w+5,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color2});
-
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:55+w-10,y:165},'pSN');
-
-        //--
-
-        value=entry.ROIc[1];
-        svg.rect({x:61+(w+5)*2,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color1});
-        
-        svg.line({x1:61+(w+5)*2+w/2,y1:150*(max-entry.ROImin[1])/max,x2:61+(w+5)*2+w/2,y2:150*(max-entry.ROImax[1])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:61+(w+5)*2+w/4,y1:150*(max-entry.ROImin[1])/max,x2:61+(w+5)*2+w*3/4,y2:150*(max-entry.ROImin[1])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:61+(w+5)*2+w/4,y1:150*(max-entry.ROImax[1])/max,x2:61+(w+5)*2+w*3/4,y2:150*(max-entry.ROImax[1])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-
-        value=entry.ROIs[1];
-        svg.rect({x:61+(w+5)*3,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color2});
-
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:61+(w+5)*3-27,y:165},'Putamen');
-
-        //--
-
-        value=entry.ROIc[2];
-        svg.rect({x:67+(w+5)*4,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color1});
-
-        svg.line({x1:67+(w+5)*4+w/2,y1:150*(max-entry.ROImin[2])/max,x2:67+(w+5)*4+w/2,y2:150*(max-entry.ROImax[2])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:67+(w+5)*4+w/4,y1:150*(max-entry.ROImin[2])/max,x2:67+(w+5)*4+w*3/4,y2:150*(max-entry.ROImin[2])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:67+(w+5)*4+w/4,y1:150*(max-entry.ROImax[2])/max,x2:67+(w+5)*4+w*3/4,y2:150*(max-entry.ROImax[2])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-
-        value=entry.ROIs[2];
-        svg.rect({x:67+(w+5)*5,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color2});
-
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:67+(w+5)*5-15,y:165},'SCP');
-
-        //--
-
-        value=entry.ROIc[3];
-        svg.rect({x:73+(w+5)*6,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color1});
-
-        svg.line({x1:73+(w+5)*6+w/2,y1:150*(max-entry.ROImin[3])/max,x2:73+(w+5)*6+w/2,y2:150*(max-entry.ROImax[3])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:73+(w+5)*6+w/4,y1:150*(max-entry.ROImin[3])/max,x2:73+(w+5)*6+w*3/4,y2:150*(max-entry.ROImin[3])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-        svg.line({x1:73+(w+5)*6+w/4,y1:150*(max-entry.ROImax[3])/max,x2:73+(w+5)*6+w*3/4,y2:150*(max-entry.ROImax[3])/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-
-        value=entry.ROIs[3];
-        svg.rect({x:73+(w+5)*7,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color2});
-
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:73+(w+5)*7-15,y:165},'MCP');
+            svg.rect({x:x,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color1});
+    
+            svg.line({x1:x+w/2,y1:150*(max-(ROIc[region].avg-ROIc[region].std))/max,x2:x+w/2,y2:150*(max-(ROIc[region].avg+ROIc[region].std))/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
+            svg.line({x1:x+w/4,y1:150*(max-(ROIc[region].avg-ROIc[region].std))/max,x2:x+w*3/4,y2:150*(max-(ROIc[region].avg-ROIc[region].std))/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
+            svg.line({x1:x+w/4,y1:150*(max-(ROIc[region].avg+ROIc[region].std))/max,x2:x+w*3/4,y2:150*(max-(ROIc[region].avg+ROIc[region].std))/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
+    
+            value=entry.ROIs[region];
+            svg.rect({x:x+w+5,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color2});
+    
+            svg.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:x+w+3,y:165},region.substring(2));
+            x+=6+(w+5)*2;
+        }
+       
 
         svg.text({'font-family':'sans-serif','font-size':'12px',x:61+(w+5)*3-20,y:185},'Regions of Interest');
 
@@ -297,12 +273,11 @@ class NeuropacsReport{
         svg.text({'font-family':'sans-serif','font-size':'12px',x:355+w,y:45},'Controls');
 
         svg.rect({x:470,y:30,width:w,height:w,stroke:'black',fill:color2});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:45},'Subject');
+        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:45},'Patient');
 
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'pSN   Posterior substantia nigra');
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'SCP   Superior cerebellar peduncle');
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:130},'MCP   Middle cerebellar peduncle');
-
         ai_box3.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
 

@@ -13,16 +13,10 @@ var main=function(){
             this.defaultStyle=NeuropacsTableEntry.defaultStyle;
             this.neuropacs_connect=options.neuropacs_connect;
 
-            this.PD=Math.floor(Math.random()*100);
-            this.PD=3.5;
-            this.MSA=Math.floor(Math.random()*100);
-            this.MSA=9.5;
-            this.ROIs=[];for(let i=0;i<4;i++)this.ROIs[i]=Math.random()*3;
-            this.ROIs=[0,0,0,0];
-            this.ROIc=[0.18188,0.18311,0.304532,0.081161];
-            let std=[0.08478,0.095479,0.098471,0.086772];
-            this.ROImin=[this.ROIc[0]+std[0],this.ROIc[1]+std[1],this.ROIc[2]+std[2],this.ROIc[3]+std[3]];
-            this.ROImax=[this.ROIc[0]-std[0],this.ROIc[1]-std[1],this.ROIc[2]-std[2],0];
+            this.MSAPSPvsPD=0;
+            this.PSPvsMSA=0;
+            this.ROIs={FWMCP:0,FWPutamen:0,FWSCP:0,FWpSN:0};
+            
 
             let v=new VerticalLayout();
             this.id_label=v.append(new Label(""));
@@ -79,9 +73,9 @@ var main=function(){
                             npcs.getResults("JSON",this.id,this.id).then((o)=>{
                                 o=JSON.parse(o);
                                 console.log(o)
-                                this.PD=100-o.result.MSAPSPvsPD;
-                                this.MSA=100-o.result.PSPvsMSA;
-                                this.ROIs=[o.result.FWpSN, o.result.FWPutamen, o.result.FWSCP, o.result.FWMCP];
+                                this.MSAPSPvsPD=o.result.MSAPSPvsPD;
+                                this.PSPvsMSA=o.result.PSPvsMSA;
+                                this.ROIs={FWpSN:o.result.FWpSN, FWPutamen:o.result.FWPutamen, FWSCP:o.result.FWSCP, FWMCP:o.result.FWMCP};
                                 let w=new Window();
                                  options.windowContainer.append(w);
                                 new NeuropacsReport(w,this);
