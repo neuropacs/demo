@@ -19,7 +19,7 @@ class PDMSAPSPrequest{
 		let ch1=h.append(new Checkbox("The patient is 40 years of age or older."));
 		let ch2=h.append(new Checkbox("The patient experiences symptoms consistent with PD, MSA or PSP."));
 		let ch3=h.append(new Checkbox("The neuropacs diffusion MRI acquisition protocol has been followed."));
-		let ch4=h.append(new Checkbox("The MRI scan has been visually inspected to confirm that it contains the full volume of the brain and is free of distortions due to patient motion or other forms of artifacts."));
+		let ch4=h.append(new Checkbox("The MRI scan has been visually inspected to confirm that it contains the full volume of the brain and is free of distortions due to patient motion or other forms of artifacts, such as tumors."));
 
 		h.append(new Button("Upload MRI")).whenClicked().then(()=>{
 			if(ch1.isSelected() && ch2.isSelected() && ch3.isSelected() && ch4.isSelected())
