@@ -66,7 +66,7 @@ var getAPIKey=function(wind){
 }
 
 var main=function(args){
-	const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/dev";
+	const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v1/";
 
 
 
