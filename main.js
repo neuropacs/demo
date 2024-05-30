@@ -66,7 +66,7 @@ var getAPIKey=function(wind){
 }
 
 var main=function(args){
-	const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v1/";
+	const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v2";
 
 
 
@@ -77,7 +77,7 @@ var main=function(args){
 			title:"API Testing Tool",
 			prompt:"Connecting...",
 			buttons:[],
-			icon:"neuropacs_icon.svg"
+			icon:"lib/img/logo_animated.svg"
 		});
 		wind.getWindowContainer().append(loading);
 
@@ -102,11 +102,15 @@ var main=function(args){
 			let w=new  DialogWindow({
 				title:"API Testing Tool",
 				prompt:error,
-				buttons:["Try a different key"],
+				buttons:["Retry","Try a different key"],
 				icon:DialogWindow.EXCLAMATION
 			});
 			wind.getWindowContainer().append(w);
 			w.getButton("Try a different key").whenPressed().then(()=>{
+				neuropacs_storage.setFields({"APIkey":""});
+				location.reload();
+			});
+			w.getButton("Retry").whenPressed().then(()=>{
 				location.reload();
 			});
 		})
@@ -244,139 +248,41 @@ popLayout.setPosition('left');
 							if(m<10)m="0"+m;
 							entry.setDate(""+h+":"+m);
 
-						 async function uploadPart(dataset,start,n,cb){
-							const totalFiles = dataset.length;
-							let attempts=0;
-							for (let i = start; i < totalFiles; i+=n) {
-								//console.log("Upload "+i+" of "+totalFiles+" ("+start+")");
-								try{
-									await npcs.upload(dataset[i], job, job);
-									//let result=await npcs.validateUpload([dataset[i].name],job,job);
-									//console.log(result);
-									//console.log(''+i+' '+n+' '+totalFiles);
-									cb();
-									if(attempts>0)console.log('ok');
-									attempts=0;
-								}catch (e)
-								{
-									console.log(e);
-									if(attempts<4){
-										console.log('will re-attempt '+attempts+'...');
-										i-=n;
-										attempts+=1;
-										await new Promise(r => setTimeout(r, 2000));
-									}else{
-										throw new Error(e);
-									}
+
+						async function uploadDataset(job,dataset,product,progress_callback){
+							let to_remove=[];
+							for(let f in dataset)if(dataset[f].name.indexOf('.')==0)to_remove.push(f);
+							for(let f=to_remove.length-1;f>=0;f--) dataset.splice(to_remove[f],1);
+
+							progress_callback({progress:0,status:"Uploading..."});
+							await npcs.uploadDataset(dataset,job,job,progress_callback);
+							progress_callback({progress:0,status:"Uploading completed. Waiting for validation..."});
+							await new Promise(res => setTimeout(res, 10000));
+							progress_callback({progress:0,status:"Validating upload..."});
+							let result=await npcs.validateUpload(dataset,job,job,null,progress_callback);
+							let missingFiles=result.missingFiles;
+							if(missingFiles.length>0)
+							{
+								let mis={};
+								for(let f=0;f<missingFiles.length;f++)mis[missingFiles[f]]=true;
+								let new_dataset=[];
+								for(let f=0;f<dataset.length;f++){
+									if(mis[dataset[f].name])new_dataset.push(dataset[f]);
 								}
-								//console.log("Done "+i);
-								
-							}
-						 }
+								await uploadDataset(job,new_dataset,product,progress_callback);
+							}else{
+								await npcs.runJob(product,job,job);
+							}	
+						}
 
-						function uploadParts(dataset,n,cb){
-							const asyncProcesses=[];
-							for(let i=0;i<n;i++){
-								asyncProcesses.push(uploadPart(dataset,i,n,cb));
-							}
-							return Promise.all(asyncProcesses);
-						 }
-
-					
-
-						 async function uploadDataset(dataset) {
-							try {
-				
-							
-							  
-							  entry.setProgressComment("Uploading...");
-							  o.setFields({info:"Uploading..."});
-
-							  try{
-								let uploaded=false;
-								let upload_attempts=0;
-								
-
-								while(uploaded==false){
-									//console.log(dataset);
-									let filenames=[];
-									for(let i=0;i<dataset.length;i++){
-										filenames.push(dataset[i].name);
-									}
-									let totalFiles = dataset.length;
-									let i=0;
-									await uploadParts(dataset,4,()=>{
-											i++;
-											entry.setProgress(Math.round(100*(i)/totalFiles));
-											//o.setFields({progress:Math.round(100*(i)/totalFiles)});
-									});
-
-									
-									entry.setProgressComment("Verifying uploaded data...");
-									o.setFields({info:"Verifying uploaded data..."}); 
-
-									let missingFiles=[];
-									i=0;
-									for(;i<filenames.length;){
-										let fnm=[];
-										for(let j=0;j<100 && i<filenames.length; j++){
-											fnm.push(filenames[i]);
-											i++;
-										}
-										//console.log(fnm);
-										if(upload_attempts>0)await new Promise(r => setTimeout(r, 2000));
-										let result=await npcs.validateUpload(fnm,job,job);
-										//console.log(result);
-										for(let j=0;j<result.missingFiles.length;j++)missingFiles.push(result.missingFiles[j]);
-									}
-									
-									if(missingFiles.length==0) uploaded=true;
-									else{
-										upload_attempts+=1;
-										if(upload_attempts>30)throw new Error("Dataset upload failed (10)!");
-										console.log(upload_attempts);
-										console.log(missingFiles);
-										let mis={};
-										for(let f=0;f<missingFiles.length;f++)mis[missingFiles[f]]=true;
-										let new_dataset=[];
-										for(let f=0;f<dataset.length;f++){
-											if(mis[dataset[f].name])new_dataset.push(dataset[f]);
-										}
-										dataset=new_dataset;
-									}
-								}
-
-							  }catch(error){
-								console.log(error);
-								entry.setProgressComment("Error Uploading!");
-								o.setFields({info:"Error Uploading",failed:true});
-								return;
-							  }
-				
-							  entry.setProgressComment("Uploaded. Analysis is starting...");
-							  o.setFields({info:"Uploaded. Analysis is starting...",uploaded:true,uploadDate:new Date().getTime()});
-
-							  let j=await npcs.runJob("PD/MSA/PSP-v1.0", job, job);
-							  console.log(j);
-							  entry.setProgress(0);
-							  entry.setProgressComment("Analysis started...");
-							  o.setFields({info:"Analysis started...",progress:0,});
-
-							} catch (error) {
-							  console.log(error);
-							  entry.setProgressComment("Failed!");
-							  if (error.neuropacsError) {
-								throw new Error(error.neuropacsError);
-							  } else {
-								throw new Error("Dataset upload failed!");
-							  }
-							}
-						  }
-
-						  
-
-						uploadDataset(dataset).then(()=>{
-					
+						uploadDataset(job,dataset,"PD/MSA/PSP-v1.0",(d)=>{
+							entry.setProgress(d.progress);
+							entry.setProgressComment(d.status);
+						}).then(()=>{
+							entry.setProgress(0);
+							entry.setProgressComment("Analysis queued...");
+							o.setFields({info:"Analysis queued...",progress:0,});
+							entry.autoUpdate();
 						});
 
 					});
@@ -415,20 +321,15 @@ split_header.getFirstContainer().append(logo);
 split.getFirstContainer().append(split_header);
 
 
-let addRow=(table,id,object)=>{
-	console.log(object);
-	let row=table.tBody.prepend(new TableRow({table:table}));
-	let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(object).setId(id).setName(object.getSystemProperty('NAME')).setProduct('PD/MSA/PSP');
-		entry.startAnimation();
-};
 
 let load_orders=()=>{
-	//We populate the table with random values
 	let list=neuropacs_storage.getSystemProperty('LIST');
 	let i=0;
 	for(var id in list){
 		browser_storage.getObject(id).whenReady().then((object)=>{
-			addRow(table,id,object);
+			let row=table.tBody.prepend(new TableRow({table:table}));
+			let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(object).setId(id).setName(object.getSystemProperty('NAME')).setProduct('PD/MSA/PSP');
+			entry.autoUpdate();
 		})
 		
 		i+=1;
