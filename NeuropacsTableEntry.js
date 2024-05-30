@@ -48,18 +48,24 @@ var main=function(){
 	
             bg.append(new Button("Result")).setIcon(icon).appendCustomStyle(b_style).whenClicked().then(()=>{
 
-
+                let current_status=this.getProgressComment();
+                this.setProgressComment("Checking status...");
                 this.neuropacs_connect().then((npcs)=>{
                         if(this.progress_bar.getValue()<100)
                         {
                             npcs.checkStatus(this.id,this.id).then((o)=>{
+                                this.setProgressComment(current_status);
                                 if(o.progress!=this.cloudObject.getFields()['progress']||o.info!=this.cloudObject.getFields()['info']){
                                     console.log('New progress');
+                                    console.log(o);
                                     this.setProgress(o.progress);
-                                    this.setProgressComment(o.info);
-                                    this.cloudObject.setFields({progress:o.progress,info:o.info,started:o.started,finished:o.finished,failed:o.failed});
+                                    if(o.info && o.info.length>0){
+                                        this.setProgressComment(o.info);
+                                        this.cloudObject.setFields({progress:o.progress,info:o.info,started:o.started,finished:o.finished,failed:o.failed});
+                                    }
                                 }else 
                                 {
+                                    this.setProgressComment(this.cloudObject.getFields()['info']);
                                     console.log('Same progress');
                                     console.log(o);
                                 }
@@ -70,12 +76,14 @@ var main=function(){
                             })
                         }else
                         {
+                            this.setProgressComment("Finished");
                             npcs.getResults("JSON",this.id,this.id).then((o)=>{
                                 o=JSON.parse(o);
                                 console.log(o)
                                 this.MSAPSPvsPD=o.result.MSAPSPvsPD;
                                 this.PSPvsMSA=o.result.PSPvsMSA;
                                 this.ROIs={FWpSN:o.result.FWpSN, FWPutamen:o.result.FWPutamen, FWSCP:o.result.FWSCP, FWMCP:o.result.FWMCP};
+                                this.reportDate=o.date;
                                 let w=new Window();
                                  options.windowContainer.append(w);
                                 new NeuropacsReport(w,this);
@@ -157,10 +165,14 @@ var main=function(){
             return this;
         }
 
+        getProgressComment(){
+            return this.progress_label.text;
+        }
+
         getProgressBar(){return this.progress_bar;}
         
 
-        startAnimation(){
+        autoUpdate(){
             let object=this.cloudObject;
             let entry=this;
             let id=this.id;
@@ -179,25 +191,31 @@ var main=function(){
 			//nothing to do
 		}else
 		{
-			console.log('checking... '+id);
-            this.neuropacs_connect().then((npcs)=>{
-                npcs.checkStatus(id,id).then((o)=>{
-                    if(o.progress!=object.getFields()['progress']||o.info!=object.getFields()['info']){
-                        console.log('New progress');
-                        entry.setProgress(o.progress);
-                        entry.setProgressComment(o.info);
-                        object.setFields({progress:o.progress,info:o.info,started:o.started,finished:o.finished,failed:o.failed});
-                    }else 
-                    {
-                        console.log('Same progress');
-                        console.log(o);
-                    }
-                }).catch(()=>{
-                    entry.setProgressComment('ERROR');
-                    object.setFields({progress:0,info:"Error",failed:true});
-                    
+            let update=()=>{
+                console.log('checking... '+id);
+                this.neuropacs_connect().then((npcs)=>{
+                    npcs.checkStatus(id,id).then((o)=>{
+                        if(o.progress!=object.getFields()['progress']||o.info!=object.getFields()['info']){
+                            console.log('New progress');
+                            entry.setProgress(o.progress);
+                            if(o.info && o.info.length>0){
+                                entry.setProgressComment(o.info);
+                                object.setFields({progress:o.progress,info:o.info,started:o.started,finished:o.finished,failed:o.failed});
+                            }
+                        }else 
+                        {
+                            console.log('Same progress');
+                            console.log(o);
+                        }
+                    }).catch(()=>{
+                        entry.setProgressComment('ERROR');
+                        object.setFields({progress:0,info:"Error",failed:true});
+                        
+                    })
                 })
-            })
+            }
+            update();
+            setTimeout(update,300000);
 		}
 
         }
