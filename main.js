@@ -81,7 +81,7 @@ var main=function(args){
 		});
 		wind.getWindowContainer().append(loading);
 
-		const npcs = Neuropacs.init(serverUrl, API_KEY);
+		const npcs = Neuropacs.init({serverUrl, apiKey:API_KEY});
 		console.log(npcs);
 
 		//CONNECT TO NEUROPACS
@@ -255,11 +255,11 @@ popLayout.setPosition('left');
 							for(let f=to_remove.length-1;f>=0;f--) dataset.splice(to_remove[f],1);
 
 							progress_callback({progress:0,status:"Uploading..."});
-							await npcs.uploadDataset(dataset,job,job,progress_callback);
+							await npcs.uploadDataset({dataset,orderId:job,datasetId:job,callback:progress_callback});
 							progress_callback({progress:0,status:"Uploading completed. Waiting for validation..."});
 							await new Promise(res => setTimeout(res, 10000));
 							progress_callback({progress:0,status:"Validating upload..."});
-							let result=await npcs.validateUpload(dataset,job,job,null,progress_callback);
+							let result=await npcs.validateUpload({dataset,orderId:job,datasetId:job,callback:progress_callback});
 							let missingFiles=result.missingFiles;
 							if(missingFiles.length>0)
 							{
@@ -271,7 +271,7 @@ popLayout.setPosition('left');
 								}
 								await uploadDataset(job,new_dataset,product,progress_callback);
 							}else{
-								await npcs.runJob(product,job,job);
+								await npcs.runJob({productId:product,orderId:job,datasetId:job});
 							}	
 						}
 
