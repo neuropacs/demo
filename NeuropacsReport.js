@@ -89,19 +89,20 @@ class NeuropacsReport{
         opn.set(metadata_box.style,
 			{
                 position:'absolute',
-				top:"8%",
+				top:"10%",
 				left:"0%",
-				right:"35%",
+				right:"0%",
 				height:"10%"
 			}
 		);
+
 
         metadata_box.appendChild(this.newField({top:'0%',height:'33%',name:'Report ID: '+entry.id}));
         let date=new Date(entry.cloudObject.info.uploadDate);
         let month=date.getMonth();if(month<10)month="0"+month;
         let day=date.getDate();if(day<10)day="0"+day;
 
-        metadata_box.appendChild(this.newField({top:'33%',height:'33%',name:'Date (yyyy-mm-dd): '+date.getFullYear()+'-'+month+'-'+day}));
+        metadata_box.appendChild(this.newField({top:'33%',height:'33%',name:'Date (yyyy-mm-dd): '+entry.reportDate}));
         //metadata_box.appendChild(this.newField({top:'50%',height:'25%',name:'Clinical Data: '}));
         //metadata_box.appendChild(this.newField({top:'66%',height:'33%',name:'Prediction Results'}));
 
@@ -269,15 +270,18 @@ class NeuropacsReport{
 
         svg.text({'transform':'rotate(-90 10 75)','font-family':'sans-serif','font-size':'12px',x:-15,y:80},'Free water');
 
-        svg.rect({x:350,y:30,width:w,height:w,stroke:'black',fill:color1});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:355+w,y:45},'Controls');
+        svg.rect({x:350,y:10,width:w,height:w,stroke:'black',fill:color1});
+        svg.text({'font-family':'sans-serif','font-size':'12px',x:355+w,y:25},'Controls');
 
-        svg.rect({x:470,y:30,width:w,height:w,stroke:'black',fill:color2});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:45},'Patient');
+        svg.rect({x:470,y:10,width:w,height:w,stroke:'black',fill:color2});
+        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:25},'Patient');
 
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'pSN   Posterior substantia nigra');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'SCP   Superior cerebellar peduncle');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:130},'MCP   Middle cerebellar peduncle');
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:70},"PD:   Parkinson`s disease");
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSA:   Multiple system atrophy');
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'PSP:  Progressive supranuclear palsy');
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:130},'pSN:   Posterior substantia nigra');
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:150},'SCP:   Superior cerebellar peduncle');
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:170},'MCP:   Middle cerebellar peduncle');
         ai_box3.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
 
