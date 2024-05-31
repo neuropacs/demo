@@ -49,6 +49,13 @@ var main=function(){
             this.result_button=bg.append(new Button("Result"));
             this.result_button.setIcon(icon).appendCustomStyle(b_style).whenClicked().then(()=>{
 
+                if(typeof this.cloudObject==='undefined'){
+                    let w=new Window();
+                    options.windowContainer.append(w);
+                    new NeuropacsReport(w,this);
+                    return;
+                }
+
                 let current_status=this.getProgressComment();
                 this.setProgressComment("Checking status...");
                 this.neuropacs_connect().then((npcs)=>{
@@ -70,9 +77,27 @@ var main=function(){
                                     console.log('Same progress');
                                     console.log(o);
                                 }
-                            }).catch(()=>{
-                                this.setProgressComment('ERROR');
-                                object.setFields({progress:0,info:"Error",failed:true});
+                            }).catch((e)=>{
+                                if(typeof e!='undefined' && typeof e.message!='undefined' && e.message.indexOf('Bucket not found')>-1)
+                                {
+                                    this.cloudObject.setFields({progress:100,info:"Expired",failed:true});
+                                    this.setProgressComment('Expired');
+                                    this.setProgress(100);
+
+                                    var dialogWindow=new DialogWindow({
+                                        title:"Order expired",
+                                        prompt:"This order has now expired.",
+                                        buttons:["OK"],
+                                        icon:DialogWindow.EXCLAMATION
+                                    })
+                                
+                                    //Then we added it to the window container.
+                                    options.windowContainer.append(dialogWindow);
+                                }
+                                else{
+                                    this.setProgressComment('ERROR');
+                                    this.cloudObject.setFields({progress:0,info:"Error",failed:true});
+                                }
                                 
                             })
                         }else
@@ -88,6 +113,22 @@ var main=function(){
                                 let w=new Window();
                                  options.windowContainer.append(w);
                                 new NeuropacsReport(w,this);
+                            }).catch(()=>{
+
+                                this.cloudObject.setFields({progress:100,info:"Expired",failed:true});
+                                this.setProgressComment('Expired');
+                                this.setProgress(100);
+
+                                var dialogWindow=new DialogWindow({
+                                    title:"Order expired",
+                                    prompt:"This order has now expired.",
+                                    buttons:["OK"],
+                                    icon:DialogWindow.EXCLAMATION
+                                })
+                            
+                                //Then we added it to the window container.
+                                options.windowContainer.append(dialogWindow);
+
                             })	
                         }
                 });
@@ -141,6 +182,18 @@ var main=function(){
             return this;
         }
 
+        setResults(results){
+            console.log(results);
+            let o=results;
+            this.setId(o.orderID);
+            this.setDate(o.date);
+            this.MSAPSPvsPD=o.result.MSAPSPvsPD;
+            this.PSPvsMSA=o.result.PSPvsMSA;
+            this.ROIs={FWpSN:o.result.FWpSN, FWPutamen:o.result.FWPutamen, FWSCP:o.result.FWSCP, FWMCP:o.result.FWMCP};
+            this.reportDate=o.date;
+            return this;
+        }
+
         setName(name){
             this.id_label.setText(name);
             return this;
@@ -148,6 +201,7 @@ var main=function(){
 
         setDate(date){
             this.date_label.setText(date);
+            this.reportDate=date;
             return this;
         }
 
