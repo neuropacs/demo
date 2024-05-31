@@ -334,15 +334,6 @@ popLayout.setPosition('left');
 
 		});
 	});
-	popLayout.append(new Button("AD/DLB")).whenClicked().then(()=>{
-		popLayout.hide();
-		wind.getWindowContainer().append(new  DialogWindow({
-			title:"AD/DLB",
-			prompt:"Coming soon...",
-			buttons:["OK"],
-			icon:'neuropacs_icon.svg'
-		}));
-	})
 b.append(popLayout);
 
 var logo=new Image();
