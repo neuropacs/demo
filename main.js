@@ -33,11 +33,27 @@ var neuropacs_storage;
 var browser_storage;
 var neuropacs_connect;
 
-var getAPIKey=function(wind){
+var askUserKey=function(wind){
 	let p=new opn.Promise();
-
+	let ask_user=()=>{
+		let w=new  InputWindow({
+			title:"API Testing Tool",
+			prompt:"Please type your API key:",
+			icon:"neuropacs_icon.svg"
+		});
+		wind.getWindowContainer().append(w);
 	
+		w.whenSubmitted().then((input)=>{
+			if(input.getText().length>0)p.callThen({object:input.getText(),event:true});
+			else ask_user();
+		})
+	}
+	ask_user();
+	return p;
+}
 
+var getAPIKey=function(wind,ask){
+	let p=new opn.Promise();
 	let ask_user=()=>{
 		let w=new  InputWindow({
 			title:"API Testing Tool",
@@ -56,7 +72,10 @@ var getAPIKey=function(wind){
 		neuropacs_storage=o;
 
 		let API_KEY=neuropacs_storage.getFields()['APIkey'];
-		if(typeof API_KEY==='undefined' || API_KEY.length==0)ask_user();
+		if(typeof API_KEY==='undefined' || API_KEY.length==0){
+			if(ask)ask_user();
+			else p.callThen({object:null,event:false});
+		}
 		else p.callThen({object:API_KEY,event:false});
 
 	})
@@ -65,13 +84,23 @@ var getAPIKey=function(wind){
 	return p;
 }
 
+const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v2";
+
+var askApiKey=function(wind){
+	askUserKey(wind).then((apiKey)=>{
+		neuropacs_storage.setFields({"APIkey":apiKey});
+		location.reload();
+	})
+}
+
 var main=function(args){
-	const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v2";
-
-
-
 	var wind=args.app.getWindow();
-	getAPIKey(wind).then((API_KEY,USER_TYPED)=>{
+	getAPIKey(wind,false).then((apiKey,USER_TYPED)=>{
+
+		if(apiKey==null){
+			main2(args,null);
+			return;
+		}
 
 		let loading=new  DialogWindow({
 			title:"API Testing Tool",
@@ -79,15 +108,16 @@ var main=function(args){
 			buttons:[],
 			icon:"lib/img/logo_animated.svg"
 		});
+
 		wind.getWindowContainer().append(loading);
 
-		const npcs = Neuropacs.init({serverUrl, apiKey:API_KEY});
+		const npcs = Neuropacs.init({serverUrl, apiKey});
 		console.log(npcs);
 
 		//CONNECT TO NEUROPACS
 		const conn =  npcs.connect().then((conn)=>{
 
-			neuropacs_storage.setFields({"APIkey":API_KEY});
+			neuropacs_storage.setFields({"APIkey":apiKey});
 			
 
 				opn.wait({}).then(()=>{
@@ -102,15 +132,18 @@ var main=function(args){
 			let w=new  DialogWindow({
 				title:"API Testing Tool",
 				prompt:error,
-				buttons:["Retry","Try a different key"],
+				buttons:["Retry","Try a different key","Use without key"],
 				icon:DialogWindow.EXCLAMATION
 			});
 			wind.getWindowContainer().append(w);
 			w.getButton("Try a different key").whenPressed().then(()=>{
-				neuropacs_storage.setFields({"APIkey":""});
-				location.reload();
+				askApiKey(wind);
 			});
 			w.getButton("Retry").whenPressed().then(()=>{
+				location.reload();
+			});
+			w.getButton("Use without key").whenPressed().then(()=>{
+				neuropacs_storage.setFields({"APIkey":""});
 				location.reload();
 			});
 		})
@@ -138,8 +171,7 @@ var main2= function(args,npcs){
 			buttons:["Yes","No"],
 			icon:DialogWindow.QUESTIONMARK
 		})).getButton('Yes').whenClicked().then(()=>{
-			neuropacs_storage.setFields({"APIkey":""});
-			location.reload();
+			askApiKey(wind);
 		});
 	});
 
@@ -213,7 +245,13 @@ split_header.appendCustomStyle({
 	}
 })
 let b=new Button("New Order");
-b.whenPressed().then(()=>{popLayout.show()})
+b.whenPressed().then(()=>{
+
+	if(npcs==null){
+		askApiKey(wind);
+	}
+	else popLayout.show()
+})
 
 var popLayout=new PopUpLayout();
 popLayout.setPosition('left');	
@@ -336,7 +374,55 @@ let load_orders=()=>{
 	}
 }
 
-load_orders();
+table.tBody.prepend(new TableRow({table:table}))
+.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
+.setName('DEMO_MRI_3').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
+    "orderID": "183b21a1-15cb-4882-8aec-2d6bf4cd1d4d",
+    "date": "2024-05-30",
+    "product": "PD/MSA/PSP-v1.0",
+    "result": {
+        "MSAPSPvsPD": "91.3",
+        "PSPvsMSA": "94.4",
+        "FWpSN": "0.28",
+        "FWPutamen": "0.20",
+        "FWSCP": "0.41",
+        "FWMCP": "0.09"
+    }
+});
+			
+table.tBody.prepend(new TableRow({table:table}))
+.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
+.setName('DEMO_MRI_2').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
+    "orderID": "37562845-1a07-46be-ac86-e832e40e597e",
+    "date": "2024-05-31",
+    "product": "PD/MSA/PSP-v1.0",
+    "result": {
+        "MSAPSPvsPD": "53.0",
+        "PSPvsMSA": "48.5",
+        "FWpSN": "0.17",
+        "FWPutamen": "0.24",
+        "FWSCP": "0.23",
+        "FWMCP": "0.08"
+    }
+});
+
+table.tBody.prepend(new TableRow({table:table}))
+.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
+.setName('DEMO_MRI_1').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
+    "orderID": "4ed799bb-6d80-4a1f-9639-2db6cc58a1c8",
+    "date": "2024-05-31",
+    "product": "PD/MSA/PSP-v1.0",
+    "result": {
+        "MSAPSPvsPD": "21.6",
+        "PSPvsMSA": "6.7",
+        "FWpSN": "0.15",
+        "FWPutamen": "0.17",
+        "FWSCP": "0.15",
+        "FWMCP": "0.06"
+    }
+})
+
+if(npcs!=null)load_orders();
 
 
 }
