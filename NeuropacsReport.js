@@ -98,10 +98,6 @@ class NeuropacsReport{
 
 
         metadata_box.appendChild(this.newField({top:'0%',height:'33%',name:'Report ID: '+entry.id}));
-        let date=new Date(entry.cloudObject.info.uploadDate);
-        let month=date.getMonth();if(month<10)month="0"+month;
-        let day=date.getDate();if(day<10)day="0"+day;
-
         metadata_box.appendChild(this.newField({top:'33%',height:'33%',name:'Date (yyyy-mm-dd): '+entry.reportDate}));
         //metadata_box.appendChild(this.newField({top:'50%',height:'25%',name:'Clinical Data: '}));
         //metadata_box.appendChild(this.newField({top:'66%',height:'33%',name:'Prediction Results'}));
@@ -182,11 +178,11 @@ class NeuropacsReport{
         }
 
 
-        if(entry.MSAPSPvsPD>50){
+        if(entry.MSAPSPvsPD<50){
+            draw_classifier(svg.group({transform:'translate(150 0)'}),100-entry.MSAPSPvsPD,'PD','MSA/PSP');
+        }else{
             draw_classifier(svg.group(),100-entry.MSAPSPvsPD,'PD','MSA/PSP');
             draw_classifier(svg.group({transform:'translate(300 0)'}),100-entry.PSPvsMSA,'MSA','PSP');
-        }else{
-            draw_classifier(svg.group({transform:'translate(150 0)'}),100-entry.MSAPSPvsPD,'PD','MSA/PSP');
         }
 
         svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
