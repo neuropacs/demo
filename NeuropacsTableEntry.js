@@ -262,6 +262,7 @@ var main=function(){
                             console.log('Same progress');
                             console.log(o);
                         }
+			setTimeout(update,300000);
                     }).catch(()=>{
                         entry.setProgressComment('ERROR');
                         object.setFields({progress:0,info:"Error",failed:true});
@@ -270,7 +271,7 @@ var main=function(){
                 })
             }
             update();
-            setTimeout(update,300000);
+            
 		}
 
         }
