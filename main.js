@@ -309,6 +309,8 @@ popLayout.setPosition('left');
 								}
 								await uploadDataset(job,new_dataset,product,progress_callback);
 							}else{
+								progress_callback({progress:0,status:"Validation completed. Waiting for analysis to start..."});
+								await new Promise(res => setTimeout(res, 20000));
 								await npcs.runJob({productId:product,orderId:job,datasetId:job});
 							}	
 						}
@@ -318,8 +320,8 @@ popLayout.setPosition('left');
 							entry.setProgressComment(d.status);
 						}).then(()=>{
 							entry.setProgress(0);
-							entry.setProgressComment("Analysis queued...");
-							o.setFields({info:"Analysis queued...",progress:0,});
+							entry.setProgressComment("Analysis process queued...");
+							o.setFields({info:"Analysis process queued...",progress:0,});
 							entry.autoUpdate();
 						});
 
@@ -334,6 +336,7 @@ popLayout.setPosition('left');
 
 		});
 	});
+	
 b.append(popLayout);
 
 var logo=new Image();
