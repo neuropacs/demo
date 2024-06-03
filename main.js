@@ -104,7 +104,7 @@ var main=function(args){
 
 		let loading=new  DialogWindow({
 			title:"API Testing Tool",
-			prompt:"Connecting...",
+			prompt:"Establishing secure connection...",
 			buttons:[],
 			icon:"lib/img/logo_animated.svg"
 		});
