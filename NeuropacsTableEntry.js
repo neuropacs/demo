@@ -95,8 +95,8 @@ var main=function(){
                                     options.windowContainer.append(dialogWindow);
                                 }
                                 else{
-                                    this.setProgressComment('ERROR');
-                                    this.cloudObject.setFields({progress:0,info:"Error",failed:true});
+                                    //this.setProgressComment('ERROR');
+                                    //this.cloudObject.setFields({progress:0,info:"Error",failed:true});
                                 }
                                 
                             })
@@ -262,10 +262,10 @@ var main=function(){
                             console.log('Same progress');
                             console.log(o);
                         }
-			setTimeout(update,300000);
+                        setTimeout(update,300000);
                     }).catch(()=>{
-                        entry.setProgressComment('ERROR');
-                        object.setFields({progress:0,info:"Error",failed:true});
+                        //entry.setProgressComment('ERROR');
+                        //object.setFields({progress:0,info:"Error",failed:true});
                         
                     })
                 })
