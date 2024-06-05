@@ -299,6 +299,7 @@ popLayout.setPosition('left');
 							progress_callback({progress:0,status:"Validating upload..."});
 							let result=await npcs.validateUpload({dataset,orderId:job,datasetId:job,callback:progress_callback});
 							let missingFiles=result.missingFiles;
+							console.log(missingFiles);
 							if(missingFiles.length>0)
 							{
 								let mis={};
