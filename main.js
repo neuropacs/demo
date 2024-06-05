@@ -295,7 +295,7 @@ popLayout.setPosition('left');
 							progress_callback({progress:0,status:"Uploading..."});
 							await npcs.uploadDataset({dataset,orderId:job,datasetId:job,callback:progress_callback});
 							progress_callback({progress:0,status:"Uploading completed. Waiting for validation..."});
-							await new Promise(res => setTimeout(res, 10000));
+							await new Promise(res => setTimeout(res, 20000));
 							progress_callback({progress:0,status:"Validating upload..."});
 							let result=await npcs.validateUpload({dataset,orderId:job,datasetId:job,callback:progress_callback});
 							let missingFiles=result.missingFiles;
