@@ -295,12 +295,12 @@ popLayout.setPosition('left');
 							progress_callback({progress:0,status:"Uploading..."});
 							await npcs.uploadDataset({dataset,orderId:job,datasetId:job,callback:progress_callback});
 							progress_callback({progress:0,status:"Uploading completed. Waiting for validation..."});
-							await new Promise(res => setTimeout(res, 5000));
-							progress_callback({progress:0,status:"Validating upload..."});
-							let result=await npcs.validateUpload({dataset,orderId:job,datasetId:job,callback:progress_callback});
-							let missingFiles=result.missingFiles;
-							console.log(missingFiles);
-							if(missingFiles.length>0)
+							//await new Promise(res => setTimeout(res, 5000));
+							//progress_callback({progress:0,status:"Validating upload..."});
+							//let result=await npcs.validateUpload({dataset,orderId:job,datasetId:job,callback:progress_callback});
+							//let missingFiles=result.missingFiles;
+							//console.log(missingFiles);
+							if(false /*missingFiles.length>0*/)
 							{
 								let mis={};
 								for(let f=0;f<missingFiles.length;f++)mis[missingFiles[f]]=true;
@@ -310,8 +310,8 @@ popLayout.setPosition('left');
 								}
 								await uploadDataset(job,new_dataset,product,progress_callback);
 							}else{
-								progress_callback({progress:0,status:"Validation completed. Waiting for analysis to start..."});
-								await new Promise(res => setTimeout(res, 5000));
+								//progress_callback({progress:0,status:"Validation completed. Waiting for analysis to start..."});
+								//await new Promise(res => setTimeout(res, 5000));
 								await npcs.runJob({productId:product,orderId:job,datasetId:job});
 							}	
 						}
