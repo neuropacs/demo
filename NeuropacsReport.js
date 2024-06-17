@@ -10,12 +10,83 @@ class NeuropacsReport{
         window.setSize(600,800);
         window.setIcon('neuropacs_icon.svg');
         var menulayout=new MenuLayout();
-	    menulayout.getMenuBar().append(new MenuItem('Print')).whenClicked().then((item)=>{
+	    
+
+        let formats_menu=menulayout.getMenuBar().append(new MenuItem('Download')).getSubMenu();
+        
+        var saveBlob = (function () {
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            return function (blob, fileName) {
+                var url = URL.createObjectURL(blob);
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+        }());
+
+        formats_menu.append(new MenuItem('Image (png)')).whenClicked().then((item)=>{
+            item.collapseMenu();
+            entry.neuropacs_connect().then((npcs)=>{
+                
+                /*npcs.getResults({format:"PNG",orderId:entry.id,datasetId:entry.id}).then((results)=>{
+                    console.log(results)
+                })*/
+
+                npcs.getResults({format:"PNG",orderId:entry.id,datasetId:entry.id,dataType:'blob'}).then((blob)=>{
+                    saveBlob(blob,entry.id_label.text+".png");
+                })
+            });
+	    });
+
+        formats_menu.append(new MenuItem('Text (txt)')).whenClicked().then((item)=>{
+            item.collapseMenu();
+            entry.neuropacs_connect().then((npcs)=>{
+                /*npcs.getResults({format:"TXT",orderId:entry.id,datasetId:entry.id}).then((results)=>{
+                    console.log(results)
+                })*/
+
+                npcs.getResults({format:"TXT",orderId:entry.id,datasetId:entry.id,dataType:'blob'}).then((blob)=>{
+                    saveBlob(blob,entry.id_label.text+".txt");
+                })
+            });
+	    });
+
+        formats_menu.append(new MenuItem('Object (json)')).whenClicked().then((item)=>{
+            item.collapseMenu();
+            entry.neuropacs_connect().then((npcs)=>{
+                /*npcs.getResults({format:"JSON",orderId:entry.id,datasetId:entry.id}).then((results)=>{
+                    console.log(results)
+                })*/
+
+                npcs.getResults({format:"JSON",orderId:entry.id,datasetId:entry.id,dataType:'blob'}).then((blob)=>{
+                    saveBlob(blob,entry.id_label.text+".json");
+                })
+            });
+	    });
+
+        formats_menu.append(new MenuItem('Markup (xml)')).whenClicked().then((item)=>{
+            item.collapseMenu();
+            entry.neuropacs_connect().then((npcs)=>{
+                /*npcs.getResults({format:"XML",orderId:entry.id,datasetId:entry.id}).then((results)=>{
+                    console.log(results)
+                })*/
+
+                npcs.getResults({format:"XML",orderId:entry.id,datasetId:entry.id,dataType:'blob'}).then((blob)=>{
+                    saveBlob(blob,entry.id_label.text+".xml");
+                })
+            });
+	    });
+
+        menulayout.getMenuBar().append(new MenuItem('Print')).whenClicked().then((item)=>{
             let original_size=window.getSize();
 			window.setSize(800,600);
             PrintDiv(area,{title:entry.id_label.text+' - '+entry.product_label.text+' results'});
             window.setSize(original_size[0],original_size[1]);
 	    });
+
         window.getContent().append(menulayout);
 
         let area=document.createElement('div');
@@ -178,11 +249,11 @@ class NeuropacsReport{
         }
 
 
-        if(entry.MSAPSPvsPD<50){
-            draw_classifier(svg.group({transform:'translate(150 0)'}),100-entry.MSAPSPvsPD,'PD','MSA/PSP');
+        if(entry.MSAPSPvsPD<0.5){
+            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.MSAPSPvsPD)*100,'PD','MSA/PSP');
         }else{
-            draw_classifier(svg.group(),100-entry.MSAPSPvsPD,'PD','MSA/PSP');
-            draw_classifier(svg.group({transform:'translate(300 0)'}),100-entry.PSPvsMSA,'MSA','PSP');
+            draw_classifier(svg.group(),(1-entry.MSAPSPvsPD)*100,'PD','MSA/PSP');
+            draw_classifier(svg.group({transform:'translate(300 0)'}),(1-entry.PSPvsMSA)*100,'MSA','PSP');
         }
 
         svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
