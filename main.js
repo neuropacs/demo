@@ -84,7 +84,7 @@ var getAPIKey=function(wind,ask){
 	return p;
 }
 
-const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v2";
+const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v1";
 
 var askApiKey=function(wind){
 	askUserKey(wind).then((apiKey)=>{
@@ -356,6 +356,8 @@ split.getFirstContainer().append(split_header);
 
 
 let load_orders=()=>{
+	console.log(neuropacs_storage);
+	console.log(browser_storage)
 	let list=neuropacs_storage.getSystemProperty('LIST');
 	let i=0;
 	for(var id in list){
@@ -376,8 +378,8 @@ table.tBody.prepend(new TableRow({table:table}))
     "date": "2024-05-30",
     "product": "PD/MSA/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "91.3",
-        "PSPvsMSA": "94.4",
+        "MSAPSPvsPD": "0.913",
+        "PSPvsMSA": "0.944",
         "FWpSN": "0.28",
         "FWPutamen": "0.20",
         "FWSCP": "0.41",
@@ -392,8 +394,8 @@ table.tBody.prepend(new TableRow({table:table}))
     "date": "2024-05-31",
     "product": "PD/MSA/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "53.0",
-        "PSPvsMSA": "48.5",
+        "MSAPSPvsPD": "0.530",
+        "PSPvsMSA": "0.485",
         "FWpSN": "0.17",
         "FWPutamen": "0.24",
         "FWSCP": "0.23",
@@ -408,8 +410,8 @@ table.tBody.prepend(new TableRow({table:table}))
     "date": "2024-05-31",
     "product": "PD/MSA/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "21.6",
-        "PSPvsMSA": "6.7",
+        "MSAPSPvsPD": "0.216",
+        "PSPvsMSA": "0.67",
         "FWpSN": "0.15",
         "FWPutamen": "0.17",
         "FWSCP": "0.15",
