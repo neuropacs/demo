@@ -383,12 +383,12 @@ table.tBody.prepend(new TableRow({table:table}))
     "date": "2024-05-31",
     "product": "PD/MSA/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "0.530",
-        "PSPvsMSA": "0.485",
-        "FWpSN": "0.17",
-        "FWPutamen": "0.24",
-        "FWSCP": "0.23",
-        "FWMCP": "0.08"
+        "MSAPSPvsPD": "0.597",
+        "PSPvsMSA": "0.3177",
+        "FWpSN": "0.3127",
+        "FWPutamen": "0.1434",
+        "FWSCP": "0.2649",
+        "FWMCP": "0.0617"
     }
 });
 
@@ -409,6 +409,4 @@ table.tBody.prepend(new TableRow({table:table}))
 })
 
 if(npcs!=null)load_orders();
-
-
 }
