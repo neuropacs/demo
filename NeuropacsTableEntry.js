@@ -105,16 +105,16 @@ var main=function(){
                             this.setProgressComment("Finished");
                             npcs.getResults({format:"JSON",orderId:this.id,datasetId:this.id}).then((o)=>{
                                 o=JSON.parse(o);
-                                console.log(o)
-                                this.MSAPSPvsPD=o.result.MSAPSPvsPD;
-                                this.PSPvsMSA=o.result.PSPvsMSA;
-                                this.ROIs={FWpSN:o.result.FWpSN, FWPutamen:o.result.FWPutamen, FWSCP:o.result.FWSCP, FWMCP:o.result.FWMCP};
+                                console.log(o);
+                                this.MSAPSPvsPD=o.results.MSAPSPvsPD.value;
+                                if(o.results.PSPvsMSA)this.PSPvsMSA=o.results.PSPvsMSA.value;else this.PSPvsMSA=-1;
+                                this.ROIs={FWpSN:o.results.FWpSN.value, FWPutamen:o.results.FWPutamen.value, FWSCP:o.results.FWSCP.value, FWMCP:o.results.FWMCP.value};
                                 this.reportDate=o.date;
                                 let w=new Window();
                                  options.windowContainer.append(w);
                                 new NeuropacsReport(w,this);
-                            }).catch(()=>{
-
+                            }).catch((o)=>{
+                                console.log(o)
                                 this.cloudObject.setFields({progress:100,info:"Expired",failed:true});
                                 this.setProgressComment('Expired');
                                 this.setProgress(100);
