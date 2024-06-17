@@ -17,12 +17,10 @@ var initializeLocalStorage=function(){
 		o.whenReady().then((o)=>{
 			console.log(o);
 			p.callThen({object:o});
-			//load_orders();
 		}).otherwise(()=>{
 			browser_storage.newObject({OID:'neuropacs_demo'}).whenReady().then((o)=>{
 				console.log(o);
 				p.callThen({object:o});
-				//load_orders();
 			})
 		})
 	}
@@ -116,16 +114,12 @@ var main=function(args){
 
 		//CONNECT TO NEUROPACS
 		const conn =  npcs.connect().then((conn)=>{
-
 			neuropacs_storage.setFields({"APIkey":apiKey});
-			
-
-				opn.wait({}).then(()=>{
-					loading.close();
-					neuropacs_connect=()=>{let p=new opn.Promise();p.callThen({object:npcs});return p;}
-					main2(args,npcs);	
-				})
-					
+			opn.wait({}).then(()=>{
+				loading.close();
+				neuropacs_connect=()=>{let p=new opn.Promise();p.callThen({object:npcs});return p;}
+				main2(args,npcs);	
+			})
 		}).catch((error)=>{
 			loading.close();
 			console.log(error);
@@ -156,12 +150,10 @@ var main2= function(args,npcs){
 	args.app.clearContents();//clears the loading animation
 	var wind=args.app.getWindow();//gets the window object, which has many parameters, methods, and listeners
 	wind.setFullScreen();
-	//for example:
 	
-
 	//We create a GUI menu bar with one menu item:
 	var menulayout=new MenuLayout();
-	var help_menu=menulayout.getMenuBar().append(new MenuItem('Help')).getSubMenu();
+	var help_menu=menulayout.getMenuBar().append(new MenuItem('Settings')).getSubMenu();
 	help_menu.append(new MenuItem('Set new API Key')).whenClicked().then((item)=>{
 		item.collapseMenu();
 
@@ -213,9 +205,6 @@ var main2= function(args,npcs){
 		fontSize:"28px",
 		fontFamily:"Arial"
 	});
-	//menulayout.getContainer().div.appendChild(area);
-
-
 
 	var table=new Table({
 		rows:0,
