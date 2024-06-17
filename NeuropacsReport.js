@@ -226,18 +226,18 @@ class NeuropacsReport{
 
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
-            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2.replace('/',' or '))+' diagnosis.');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2)+' diagnosis.');
         }
 
 
         if(entry.MSAPSPvsPD<0.5){
-            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.MSAPSPvsPD)*100,'PD','MSA/PSP');
+            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.MSAPSPvsPD)*100,'PD','Atypical');
         }else{
-            draw_classifier(svg.group(),(1-entry.MSAPSPvsPD)*100,'PD','MSA/PSP');
+            draw_classifier(svg.group(),(1-entry.MSAPSPvsPD)*100,'PD','Atypical');
             draw_classifier(svg.group({transform:'translate(300 0)'}),(1-entry.PSPvsMSA)*100,'MSA','PSP');
         }
 
-        svg.text({'font-family':'sans-serif','font-size':'10px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
+        svg.text({'font-family':'sans-serif','font-size':'12px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
 
        
         ai_box.style.backgroundImage="url('"+svg.getDataURL()+"')";
