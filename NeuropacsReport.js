@@ -1,6 +1,5 @@
 preload(libs['GUI']);
 preload('PrintDiv.js');
-preload('app:89muvxshkuveueob@research.dwi.ufl.edu/op.n');//QRCode
 preload('app:wyv25is7cmu8jb54@research.dwi.ufl.edu/op.n');//SVG
 
 class NeuropacsReport{
@@ -30,7 +29,6 @@ class NeuropacsReport{
         formats_menu.append(new MenuItem('Image (png)')).whenClicked().then((item)=>{
             item.collapseMenu();
             entry.neuropacs_connect().then((npcs)=>{
-                
                 /*npcs.getResults({format:"PNG",orderId:entry.id,datasetId:entry.id}).then((results)=>{
                     console.log(results)
                 })*/
@@ -170,21 +168,6 @@ class NeuropacsReport{
 
         metadata_box.appendChild(this.newField({top:'0%',height:'33%',name:'Report ID: '+entry.id}));
         metadata_box.appendChild(this.newField({top:'33%',height:'33%',name:'Date (yyyy-mm-dd): '+entry.reportDate}));
-        //metadata_box.appendChild(this.newField({top:'50%',height:'25%',name:'Clinical Data: '}));
-        //metadata_box.appendChild(this.newField({top:'66%',height:'33%',name:'Prediction Results'}));
-
-        let qr_box=document.createElement('div');
-        area.appendChild(qr_box);
-        opn.set(qr_box.style,
-			{
-                position:'absolute',
-				top:"10%",
-				width:"33%",
-				right:"0%",
-				height:"23%"
-			}
-		);
-        //new QRCode(qr_box,{text:'http://neuropacs.com',useSVG:true});
 
         let ai_box=document.createElement('div');
         area.appendChild(ai_box);
@@ -201,8 +184,6 @@ class NeuropacsReport{
 			}
 		);
         var svg=new SVG({width:600,height:400});
-    	//svg.rect({width:600,height:200,stroke:'black',fill:'none'});
-
 
         let draw_classifier=(g,percent,C1,C2)=>{
 
@@ -292,7 +273,6 @@ class NeuropacsReport{
 		);
 
         svg=new SVG({width:600,height:200});
-    	//svg.rect({width:600,height:200,stroke:'black',fill:'none'});
 
         svg.rect({x:50,y:0,width:250,height:150,stroke:'gray',fill:'none'});
 
