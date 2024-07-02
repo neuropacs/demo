@@ -282,7 +282,7 @@ popLayout.setPosition('left');
 							for(let f=to_remove.length-1;f>=0;f--) dataset.splice(to_remove[f],1);
 
 							progress_callback({progress:0,status:"Uploading..."});
-							await npcs.uploadDataset({dataset,orderId:job,datasetId:job,callback:progress_callback});
+							await npcs.uploadDataset({dataset,orderId:job,callback:progress_callback});
 							progress_callback({progress:0,status:"Uploading completed. Waiting for validation..."});
 							//await new Promise(res => setTimeout(res, 5000));
 							//progress_callback({progress:0,status:"Validating upload..."});
@@ -301,7 +301,7 @@ popLayout.setPosition('left');
 							}else{
 								//progress_callback({progress:0,status:"Validation completed. Waiting for analysis to start..."});
 								//await new Promise(res => setTimeout(res, 5000));
-								await npcs.runJob({productId:product,orderId:job,datasetId:job});
+								await npcs.runJob({productId:product,orderId:job});
 							}	
 						}
 
