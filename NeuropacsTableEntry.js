@@ -61,7 +61,7 @@ var main=function(){
                 this.neuropacs_connect().then((npcs)=>{
                         if(this.progress_bar.getValue()<100)
                         {
-                            npcs.checkStatus({orderId:this.id,datasetId:this.id}).then((o)=>{
+                            npcs.checkStatus({orderId:this.id}).then((o)=>{
                                 this.setProgressComment(current_status);
                                 if(o.progress!=this.cloudObject.getFields()['progress']||o.info!=this.cloudObject.getFields()['info']){
                                     console.log('New progress');
@@ -103,7 +103,7 @@ var main=function(){
                         }else
                         {
                             this.setProgressComment("Finished");
-                            npcs.getResults({format:"JSON",orderId:this.id,datasetId:this.id}).then((o)=>{
+                            npcs.getResults({format:"JSON",orderId:this.id}).then((o)=>{
                                 o=JSON.parse(o);
                                 console.log(o);
                                 this.MSAPSPvsPD=o.results.MSAPSPvsPD.value;
@@ -249,7 +249,7 @@ var main=function(){
             let update=()=>{
                 console.log('checking... '+id);
                 this.neuropacs_connect().then((npcs)=>{
-                    npcs.checkStatus({orderId:id,datasetId:id}).then((o)=>{
+                    npcs.checkStatus({orderId:id}).then((o)=>{
                         if(o.progress!=object.getFields()['progress']||o.info!=object.getFields()['info']){
                             console.log('New progress');
                             entry.setProgress(o.progress);
@@ -270,7 +270,7 @@ var main=function(){
                     })
                 })
             }
-            update();
+            setTimeout(update,10000);
             
 		}
 
