@@ -13,8 +13,8 @@ var main=function(){
             this.defaultStyle=NeuropacsTableEntry.defaultStyle;
             this.neuropacs_connect=options.neuropacs_connect;
 
-            this.MSAPSPvsPD=0;
-            this.PSPvsMSA=0;
+            this.Atypical=0;
+            this.PSPvsMSAp=0;
             this.ROIs={FWMCP:0,FWPutamen:0,FWSCP:0,FWpSN:0};
             
 
@@ -106,8 +106,8 @@ var main=function(){
                             npcs.getResults({format:"JSON",orderId:this.id}).then((o)=>{
                                 o=JSON.parse(o);
                                 console.log(o);
-                                this.MSAPSPvsPD=o.results.MSAPSPvsPD.value;
-                                if(o.results.PSPvsMSA)this.PSPvsMSA=o.results.PSPvsMSA.value;else this.PSPvsMSA=-1;
+                                this.Atypical=o.results.Atypical.value;
+                                if(o.results.PSPvsMSAp)this.PSPvsMSAp=o.results.PSPvsMSAp.value;else this.PSPvsMSAp=-1;
                                 this.ROIs={FWpSN:o.results.FWpSN.value, FWPutamen:o.results.FWPutamen.value, FWSCP:o.results.FWSCP.value, FWMCP:o.results.FWMCP.value};
                                 this.reportDate=o.date;
                                 let w=new Window();
@@ -187,8 +187,8 @@ var main=function(){
             let o=results;
             this.setId(o.orderID);
             this.setDate(o.date);
-            this.MSAPSPvsPD=o.result.MSAPSPvsPD;
-            this.PSPvsMSA=o.result.PSPvsMSA;
+            this.Atypical=o.result.Atypical;
+            this.PSPvsMSAp=o.result.PSPvsMSAp;
             this.ROIs={FWpSN:o.result.FWpSN, FWPutamen:o.result.FWPutamen, FWSCP:o.result.FWSCP, FWMCP:o.result.FWMCP};
             this.reportDate=o.date;
             return this;
