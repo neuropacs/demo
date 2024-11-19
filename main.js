@@ -282,7 +282,7 @@ popLayout.setPosition('left');
 							for(let f=to_remove.length-1;f>=0;f--) dataset.splice(to_remove[f],1);
 
 							progress_callback({progress:0,status:"Uploading..."});
-							await npcs.uploadDataset({dataset,orderId:job,callback:progress_callback});
+							await npcs.upload_dataset_from_path({dataset,orderId:job,callback:progress_callback});
 							progress_callback({progress:0,status:"Uploading completed. Waiting for validation..."});
 							await npcs.runJob({productName:product,orderId:job});
 								
