@@ -247,7 +247,7 @@ popLayout.setPosition('left');
 
 	//We populate the pop up with GUI elements
 	popLayout.append(new Label("Product Selection"));
-	popLayout.append(new Button("PD/MSA/PSP")).whenClicked().then(()=>{
+	popLayout.append(new Button("Atypical/MSAp/PSP")).whenClicked().then(()=>{
 		popLayout.hide();
 
 		let window=new Window();
@@ -267,7 +267,7 @@ popLayout.setPosition('left');
 					o.setFields({startDate:new Date().getTime()});
 					neuropacs_storage.add(o).then(()=>{
 							let row=table.tBody.prepend(new TableRow({table:table}));
-							let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('PD/MSA/PSP');
+							let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('Atypical/MSAp/PSP');
 							let date_created=new Date(o.getSystemProperty("DATE_CREATED"));
 							let h=date_created.getHours();
 							if(h<10)h="0"+h;
@@ -288,7 +288,7 @@ popLayout.setPosition('left');
 								
 						}
 
-						uploadDataset(job,dataset,"PD/MSA/PSP-v1.0",(d)=>{
+						uploadDataset(job,dataset,"Atypical/MSAp/PSP-v1.0",(d)=>{
 							entry.setProgress(d.progress);
 							entry.setProgressComment(d.status);
 						}).then(()=>{
