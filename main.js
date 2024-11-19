@@ -82,7 +82,7 @@ var getAPIKey=function(wind,ask){
 	return p;
 }
 
-const serverUrl = "https://sl3tkzp9ve.execute-api.us-east-2.amazonaws.com/v1";
+const serverUrl = "https://jdfkdttvlf.execute-api.us-east-1.amazonaws.com/prod";
 
 var askApiKey=function(wind){
 	askUserKey(wind).then((apiKey)=>{
