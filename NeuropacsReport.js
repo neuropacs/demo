@@ -230,11 +230,11 @@ class NeuropacsReport{
         }
 
 
-        if(entry.MSAPSPvsPD<0.5){
-            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.MSAPSPvsPD)*100,'PD','Atypical');
+        if(entry.Atypical<0.5){
+            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.Atypical)*100,'Negative','Positive');
         }else{
-            draw_classifier(svg.group(),(1-entry.MSAPSPvsPD)*100,'PD','Atypical');
-            draw_classifier(svg.group({transform:'translate(300 0)'}),(1-entry.PSPvsMSA)*100,'MSA','PSP');
+            draw_classifier(svg.group(),(1-entry.Atypical)*100,'PD','Atypical');
+            draw_classifier(svg.group({transform:'translate(300 0)'}),(1-entry.PSPvsMSAp)*100,'MSAp','PSP');
         }
 
         svg.text({'font-family':'sans-serif','font-size':'12px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
@@ -327,8 +327,7 @@ class NeuropacsReport{
         svg.rect({x:470,y:10,width:w,height:w,stroke:'black',fill:color2});
         svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:25},'Patient');
 
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:70},"PD:   Parkinson`s disease");
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSA:   Multiple system atrophy');
+        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSAp:   Multiple system atrophy');
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'PSP:  Progressive supranuclear palsy');
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:130},'pSN:   Posterior substantia nigra');
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:150},'SCP:   Superior cerebellar peduncle');
