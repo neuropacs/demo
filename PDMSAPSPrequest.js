@@ -3,7 +3,7 @@ preload(libs['GUI']);
 class PDMSAPSPrequest{
 
     constructor(window){
-        window.setTitle('PD/MSA/PSP order');
+        window.setTitle('Atypical/MSAp/PSP order');
         window.setIcon('neuropacs_icon.svg');
         window.setSize(400,400);
 
