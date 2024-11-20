@@ -335,7 +335,7 @@ let load_orders=()=>{
 	for(var id in list){
 		browser_storage.getObject(id).whenReady().then((object)=>{
 			let row=table.tBody.prepend(new TableRow({table:table}));
-			let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(object).setId(id).setName(object.getSystemProperty('NAME')).setProduct('PD/MSA/PSP');
+			let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(object).setId(id).setName(object.getSystemProperty('NAME')).setProduct('Atypical/MSAp/PSP');
 			entry.autoUpdate();
 		})
 		
@@ -345,13 +345,13 @@ let load_orders=()=>{
 
 table.tBody.prepend(new TableRow({table:table}))
 .setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
-.setName('DEMO_MRI_3').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
+.setName('DEMO_MRI_3').setProgress(100).setProgressComment('Finished').setProduct('Atypical/MSAp/PSP').setResults({
     "orderID": "183b21a1-15cb-4882-8aec-2d6bf4cd1d4d",
     "date": "2024-05-30",
-    "product": "PD/MSA/PSP-v1.0",
+    "product": "Atypical/MSAp/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "0.913",
-        "PSPvsMSA": "0.944",
+        "Atypical": "0.913",
+        "PSPvsMSAp": "0.944",
         "FWpSN": "0.28",
         "FWPutamen": "0.20",
         "FWSCP": "0.41",
@@ -364,10 +364,10 @@ table.tBody.prepend(new TableRow({table:table}))
 .setName('DEMO_MRI_2').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
     "orderID": "37562845-1a07-46be-ac86-e832e40e597e",
     "date": "2024-05-31",
-    "product": "PD/MSA/PSP-v1.0",
+    "product": "Atypical/MSAp/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "0.597",
-        "PSPvsMSA": "0.3177",
+        "Atypical": "0.597",
+        "PSPvsMSAp": "0.3177",
         "FWpSN": "0.3127",
         "FWPutamen": "0.1434",
         "FWSCP": "0.2649",
@@ -380,10 +380,10 @@ table.tBody.prepend(new TableRow({table:table}))
 .setName('DEMO_MRI_1').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
     "orderID": "4ed799bb-6d80-4a1f-9639-2db6cc58a1c8",
     "date": "2024-05-31",
-    "product": "PD/MSA/PSP-v1.0",
+    "product": "Atypical/MSAp/PSP-v1.0",
     "result": {
-        "MSAPSPvsPD": "0.216",
-        "PSPvsMSA": "0.67",
+        "Atypical": "0.216",
+        "PSPvsMSAp": "0.67",
         "FWpSN": "0.15",
         "FWPutamen": "0.17",
         "FWSCP": "0.15",
