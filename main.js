@@ -197,6 +197,7 @@ var main2= function(args,npcs){
 								let m=date_created.getMinutes();
 								if(m<10)m="0"+m;
 								entry.setDate(""+h+":"+m);
+								o.setFields({info:"Analysis process queued...",progress:0,});
 						})
 					})
 				}
