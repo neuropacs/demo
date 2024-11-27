@@ -167,6 +167,44 @@ var main2= function(args,npcs){
 		});
 	});
 
+	help_menu.append(new MenuItem('Track Order Id')).whenClicked().then((item)=>{
+		item.collapseMenu();
+
+		wind.getWindowContainer().append(new  InputWindow({
+			title:"Track Order Id",
+			prompt:"Please type your Order Id:",
+			icon:"neuropacs_icon.svg"
+		})).whenSubmitted().then((input)=>{
+			if(input.getText().length>0){
+				let job=input.getText();
+
+				wind.getWindowContainer().append(new  InputWindow({
+					title:"Track Order Id",
+					prompt:"Please type a name for your order:",
+					icon:"neuropacs_icon.svg"
+				})).whenSubmitted().then((input)=>{
+					if(input.getText().length>0){
+						let name=input.getText();
+						browser_storage.newObject({OID:job}).whenReady().then((o)=>{
+						o.rename(name);
+						o.setFields({startDate:new Date().getTime()});
+						neuropacs_storage.add(o).then(()=>{
+								let row=table.tBody.prepend(new TableRow({table:table}));
+								let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('Atypical/MSAp/PSP');
+								let date_created=new Date(o.getSystemProperty("DATE_CREATED"));
+								let h=date_created.getHours();
+								if(h<10)h="0"+h;
+								let m=date_created.getMinutes();
+								if(m<10)m="0"+m;
+								entry.setDate(""+h+":"+m);
+						})
+					})
+				}
+				})
+			}
+		});
+	});
+
 	//You can append GUI elements to the window like this:
 	wind.getContent().append(menulayout);
 
