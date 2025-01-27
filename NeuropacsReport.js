@@ -235,7 +235,7 @@ class NeuropacsReport{
                g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'no evidence of Atypical diagnosis.');
 	    	}else{
 	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'evidence of Atylical diagnosis.');
+               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'evidence of Atypical diagnosis.');
 	    	}
 	    }
 	    else {
