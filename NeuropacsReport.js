@@ -229,7 +229,7 @@ class NeuropacsReport{
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx-r-(cx-r-10)/2,y:205},C1);
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:205},C2);
 
-	    if(C1=="Negative){
+	    if(C1=="Negative"){
 	       if(percent>50){
 	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is no evidence');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
                g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'of Atypical diagnosis.');
