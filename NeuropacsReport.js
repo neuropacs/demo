@@ -188,10 +188,15 @@ class NeuropacsReport{
         let draw_classifier=(g,percent,C1,C2)=>{
 
             g.rect({x:10, y:10, width:280, height:370, stroke:'black',fill:'none'});
-        
-            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Classification between');
-            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
 
+	    if(C1=="Negative"){
+		g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Atypical Parkinsonism Prediction');
+	    }
+	    else {
+            	g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Classification between');
+           	g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
+	    }
+		
             g.text({'font-family':'sans-serif','font-size':'18px',x:20,y:80},'Classification Result:');
             g.rect({x:190, y:60, width:90, height:30, stroke:'black',fill:'none'});
             g.text({'font-family':'sans-serif','font-size':'18px',x:235,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
@@ -224,16 +229,27 @@ class NeuropacsReport{
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx-r-(cx-r-10)/2,y:205},C1);
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:205},C2);
 
+	    if(C1=="Negative){
+	       if(percent>50){
+	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is no evidence');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
+               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'of Atypical diagnosis.');
+	    	}else{
+	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is evidence');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
+               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'of Atylical diagnosis.');
+	    	}
+	    }
+	    else {
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2)+' diagnosis.');
+	    }
         }
 
 
         if(entry.Atypical<0.5){
             draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.Atypical)*100,'Negative','Positive');
         }else{
-            draw_classifier(svg.group(),(1-entry.Atypical)*100,'PD','Atypical');
+            draw_classifier(svg.group(),(1-entry.Atypical)*100,'Negative','Positive');
             draw_classifier(svg.group({transform:'translate(300 0)'}),(1-entry.PSPvsMSAp)*100,'MSAp','PSP');
         }
 
