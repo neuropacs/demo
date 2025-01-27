@@ -231,11 +231,11 @@ class NeuropacsReport{
 
 	    if(C1=="Negative"){
 	       if(percent>50){
-	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is no evidence');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'of Atypical diagnosis.');
+	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
+               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'no evidence of Atypical diagnosis.');
 	    	}else{
-	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is evidence');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'of Atylical diagnosis.');
+	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
+               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'evidence of Atylical diagnosis.');
 	    	}
 	    }
 	    else {
