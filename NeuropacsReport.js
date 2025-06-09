@@ -225,8 +225,8 @@ class NeuropacsReport{
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:205},C2);
 
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
-            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2)+' diagnosis.');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'probability of '+((percent>50)?C1:C2)+' diagnosis.');
         }
 
 
@@ -262,7 +262,7 @@ class NeuropacsReport{
         opn.set(ai_box3.style,
 			{
                 position:'absolute',
-				top:"75%",
+				top:"68%",
 				left:"0%",
 				right:"0%",
 				height:"25%",
@@ -327,9 +327,9 @@ class NeuropacsReport{
         svg.rect({x:470,y:10,width:w,height:w,stroke:'black',fill:color2});
         svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:25},'Patient');*/
 
-	svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:70},"PD:   Parkinson`s disease");
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSAp:   Multiple system atrophy');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'PSP:  Progressive supranuclear palsy');
+	svg.text({'font-family':'sans-serif','font-size':'14px',x:300,y:14,'text-anchor':'middle'},"PD: Parkinson`s disease,  MSAp: Multiple system atrophy,  PSP: Progressive supranuclear palsy");
+        //svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSAp:   Multiple system atrophy');
+        //svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'PSP:  Progressive supranuclear palsy');
         ai_box3.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
 
