@@ -189,14 +189,9 @@ class NeuropacsReport{
 
             g.rect({x:10, y:10, width:280, height:370, stroke:'black',fill:'none'});
 
-	    if(C1=="Negative"){
-		g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Atypical Parkinsonism Prediction');
-	    }
-	    else {
-            	g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Classification between');
-           	g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
-	    }
-		
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Classification between');
+            g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
+	    		
             g.text({'font-family':'sans-serif','font-size':'18px',x:20,y:80},'Classification Result:');
             g.rect({x:190, y:60, width:90, height:30, stroke:'black',fill:'none'});
             g.text({'font-family':'sans-serif','font-size':'18px',x:235,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
@@ -229,36 +224,25 @@ class NeuropacsReport{
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx-r-(cx-r-10)/2,y:205},C1);
             g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:205},C2);
 
-	    if(C1=="Negative"){
-	       if(percent>50){
-	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'no evidence of Atypical diagnosis.');
-	    	}else{
-	       g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that there is');// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
-               g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'evidence of Atypical diagnosis.');
-	    	}
-	    }
-	    else {
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher probability');
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:370,'text-anchor':'middle'},'of '+((percent>50)?C1:C2)+' diagnosis.');
-	    }
         }
 
 
         if(entry.Atypical<0.5){
-            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.Atypical)*100,'Negative','Positive');
+            draw_classifier(svg.group({transform:'translate(150 0)'}),(1-entry.Atypical)*100,'PD','MSAp/PSP');
         }else{
-            draw_classifier(svg.group(),(1-entry.Atypical)*100,'Negative','Positive');
+            draw_classifier(svg.group(),(1-entry.Atypical)*100,'PD','MSAp/PSP');
             draw_classifier(svg.group({transform:'translate(300 0)'}),(1-entry.PSPvsMSAp)*100,'MSAp','PSP');
         }
 
         svg.text({'font-family':'sans-serif','font-size':'12px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
 
-       
+       	
         ai_box.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
-        let ai_box2=document.createElement('div');
+        /*let ai_box2=document.createElement('div');
         area.appendChild(ai_box2);
         opn.set(ai_box2.style,
 			{
@@ -271,7 +255,7 @@ class NeuropacsReport{
 		);
 
        
-        ai_box2.appendChild(this.newField({top:'0%',height:'100%',name:'Biomarker Levels'}));
+        ai_box2.appendChild(this.newField({top:'0%',height:'100%',name:'Biomarker Levels'}));*/
 
         let ai_box3=document.createElement('div');
         area.appendChild(ai_box3);
@@ -290,7 +274,7 @@ class NeuropacsReport{
 
         svg=new SVG({width:600,height:200});
 
-        svg.rect({x:50,y:0,width:250,height:150,stroke:'gray',fill:'none'});
+        /*svg.rect({x:50,y:0,width:250,height:150,stroke:'gray',fill:'none'});
 
         svg.line({x1:45,x2:50,y1:150,y2:150,stroke:'gray'});
         svg.line({x1:45,x2:50,y1:100,y2:100,stroke:'gray'});
@@ -341,13 +325,11 @@ class NeuropacsReport{
         svg.text({'font-family':'sans-serif','font-size':'12px',x:355+w,y:25},'Controls');
 
         svg.rect({x:470,y:10,width:w,height:w,stroke:'black',fill:color2});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:25},'Patient');
+        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:25},'Patient');*/
 
+	svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:70},"PD:   Parkinson`s disease");
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSAp:   Multiple system atrophy');
         svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'PSP:  Progressive supranuclear palsy');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:130},'pSN:   Posterior substantia nigra');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:150},'SCP:   Superior cerebellar peduncle');
-        svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:170},'MCP:   Middle cerebellar peduncle');
         ai_box3.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
 
