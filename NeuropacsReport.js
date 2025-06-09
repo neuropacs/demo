@@ -6,7 +6,7 @@ class NeuropacsReport{
 
     constructor(window,entry){
         window.setTitle(entry.id_label.text+' - '+entry.product_label.text+' results');
-        window.setSize(600,800);
+        window.setSize(600,600);
         window.setIcon('neuropacs_icon.svg');
         var menulayout=new MenuLayout();
 	    
