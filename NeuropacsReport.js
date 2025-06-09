@@ -177,13 +177,13 @@ class NeuropacsReport{
 				top:"18%",
 				left:"0%",
 				right:"0%",
-				height:"50%",
+				height:"80%",
                 backgroundSize:'contain',
                 backgroundRepeat:'no-repeat',
                 backgroundPosition:'center center'
 			}
 		);
-        var svg=new SVG({width:600,height:400});
+        var svg=new SVG({width:600,height:415});
 
         let draw_classifier=(g,percent,C1,C2)=>{
 
@@ -193,11 +193,11 @@ class NeuropacsReport{
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
 	    		
             g.text({'font-family':'sans-serif','font-size':'18px',x:20,y:80},'Classification Result:');
-            g.rect({x:190, y:60, width:90, height:30, stroke:'black',fill:'none'});
-            g.text({'font-family':'sans-serif','font-size':'18px',x:235,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
+            g.rect({x:190, y:60, width:95, height:30, stroke:'black',fill:'none'});
+            g.text({'font-family':'sans-serif','font-size':'18px',x:237,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
 
-            let clr1='gray';
-            let clr2='rgb(248 177 18)';
+            let clr1='white';
+            let clr2='rgb(111 196 213)';
             if(percent>50){
                 let tmp=clr2;
                 clr2=clr1;
@@ -238,99 +238,11 @@ class NeuropacsReport{
         }
 
         svg.text({'font-family':'sans-serif','font-size':'12px',x:300,y:395,'text-anchor':'middle'},'Patient management decisions should not be made solely on the basis of analysis by the neuropacs system.');
-
+	svg.text({'font-family':'sans-serif','font-size':'12px',x:300,y:410,'text-anchor':'middle'},"PD: Parkinson`s disease,  MSAp: Multiple system atrophy,  PSP: Progressive supranuclear palsy");
        	
         ai_box.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
-        /*let ai_box2=document.createElement('div');
-        area.appendChild(ai_box2);
-        opn.set(ai_box2.style,
-			{
-                position:'absolute',
-				top:"68%",
-				left:"0%",
-				right:"0%",
-				height:"7.5%"
-			}
-		);
-
-       
-        ai_box2.appendChild(this.newField({top:'0%',height:'100%',name:'Biomarker Levels'}));*/
-
-        let ai_box3=document.createElement('div');
-        area.appendChild(ai_box3);
-        opn.set(ai_box3.style,
-			{
-                position:'absolute',
-				top:"68%",
-				left:"0%",
-				right:"0%",
-				height:"25%",
-                backgroundSize:'contain',
-                backgroundRepeat:'no-repeat',
-                backgroundPosition:'center center'
-			}
-		);
-
-        svg=new SVG({width:600,height:200});
-
-        /*svg.rect({x:50,y:0,width:250,height:150,stroke:'gray',fill:'none'});
-
-        svg.line({x1:45,x2:50,y1:150,y2:150,stroke:'gray'});
-        svg.line({x1:45,x2:50,y1:100,y2:100,stroke:'gray'});
-        svg.line({x1:45,x2:50,y1:50,y2:50,stroke:'gray'});
-        svg.line({x1:45,x2:50,y1:0,y2:0,stroke:'gray'});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:150},'0.0');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:102},'0.25');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:52},'0.75');
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:25,y:10},'1.0');
         
-
-        let ROIc={
-            FWMCP:{avg:0.073751,std:0.02591},
-            FWPutamen:{avg:0.176522,std:0.061003},
-            FWSCP:{avg:0.298924,std:0.076232},
-            FWpSN:{avg:0.175282,std:0.04196},
-        };
-
-        let max=1.0;
-        let color1='green';
-        let color2='rgb(158, 206, 220)';
-
-        let x=55;
-        let w=23;
-        for(let region in entry.ROIs)
-        {
-            let value=ROIc[region].avg;
-
-            svg.rect({x:x,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color1});
-    
-            svg.line({x1:x+w/2,y1:150*(max-(ROIc[region].avg-ROIc[region].std))/max,x2:x+w/2,y2:150*(max-(ROIc[region].avg+ROIc[region].std))/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-            svg.line({x1:x+w/4,y1:150*(max-(ROIc[region].avg-ROIc[region].std))/max,x2:x+w*3/4,y2:150*(max-(ROIc[region].avg-ROIc[region].std))/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-            svg.line({x1:x+w/4,y1:150*(max-(ROIc[region].avg+ROIc[region].std))/max,x2:x+w*3/4,y2:150*(max-(ROIc[region].avg+ROIc[region].std))/max,stroke:'black','stroke-width':3,'stroke-linecap':'round'});
-    
-            value=entry.ROIs[region];
-            svg.rect({x:x+w+5,y:150*(max-value)/max,width:w,height:value*150/max,stroke:'black',fill:color2});
-    
-            svg.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:x+w+3,y:165},region.substring(2));
-            x+=6+(w+5)*2;
-        }
-       
-
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:61+(w+5)*3-20,y:185},'Regions of Interest');
-
-        svg.text({'transform':'rotate(-90 10 75)','font-family':'sans-serif','font-size':'12px',x:-15,y:80},'Free water');
-
-        svg.rect({x:350,y:10,width:w,height:w,stroke:'black',fill:color1});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:355+w,y:25},'Controls');
-
-        svg.rect({x:470,y:10,width:w,height:w,stroke:'black',fill:color2});
-        svg.text({'font-family':'sans-serif','font-size':'12px',x:475+w,y:25},'Patient');*/
-
-	svg.text({'font-family':'sans-serif','font-size':'14px',x:300,y:14,'text-anchor':'middle'},"PD: Parkinson`s disease,  MSAp: Multiple system atrophy,  PSP: Progressive supranuclear palsy");
-        //svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:90},'MSAp:   Multiple system atrophy');
-        //svg.text({'font-family':'sans-serif','font-size':'14px',x:350,y:110},'PSP:  Progressive supranuclear palsy');
-        ai_box3.style.backgroundImage="url('"+svg.getDataURL()+"')";
 
 
         
