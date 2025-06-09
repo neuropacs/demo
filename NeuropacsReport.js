@@ -5,7 +5,7 @@ preload('app:wyv25is7cmu8jb54@research.dwi.ufl.edu/op.n');//SVG
 class NeuropacsReport{
 
     constructor(window,entry){
-        window.setTitle(entry.id_label.text+' - '+entry.product_label.text+' results');
+        window.setTitle(entry.id_label.text+' results');
         window.setSize(600,600);
         window.setIcon('neuropacs_icon.svg');
         var menulayout=new MenuLayout();
@@ -192,9 +192,9 @@ class NeuropacsReport{
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:28,'text-anchor':'middle'},'Classification between');
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:48,'text-anchor':'middle'},C1+" and "+C2);
 	    		
-            g.text({'font-family':'sans-serif','font-size':'18px',x:20,y:80},'Classification Result:');
-            g.rect({x:190, y:60, width:95, height:30, stroke:'black',fill:'none'});
-            g.text({'font-family':'sans-serif','font-size':'18px',x:237,y:80,'text-anchor':'middle'},(percent>50)?C1:C2);
+            g.text({'font-family':'sans-serif','font-size':'18px',x:150,y:100,'text-anchor':'middle'},'Classification Result:');
+            g.rect({x:55, y:110, width:190, height:60, stroke:'black',fill:'none'});
+            g.text({'font-family':'sans-serif','font-size':'32px',x:150,y:152,'text-anchor':'middle'},(percent>50)?C1:C2);
 
             let clr1='white';
             let clr2='rgb(111 196 213)';
@@ -206,8 +206,8 @@ class NeuropacsReport{
 
 
             let cx=150;
-            let cy=200;
-            let r=70;
+            let cy=250;
+            let r=50;
             g.ellipse({cx,cy,rx:r,ry:r,stroke:'black',fill:clr2});
 
             let points=''+cx+' '+cy;
@@ -221,8 +221,8 @@ class NeuropacsReport{
             g.polyline(options);
 
            
-            g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx-r-(cx-r-10)/2,y:205},C1);
-            g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:205},C2);
+            g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx-r-(cx-r-10)/2,y:255},C1);
+            g.text({'font-family':'sans-serif','font-size':'12px','text-anchor':'middle',x:cx+r+(cx-r-10)/2,y:255},C2);
 
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:336,'text-anchor':'middle'},'The result indicates that between '+C1);// MSAp/PSP, there is higher probability of MSAp or PSP diagnosis.
             g.text({'font-family':'sans-serif','font-size':'15px',x:150,y:353,'text-anchor':'middle'},'and '+C2+', there is higher');
