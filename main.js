@@ -190,7 +190,7 @@ var main2= function(args,npcs){
 						o.setFields({startDate:new Date().getTime()});
 						neuropacs_storage.add(o).then(()=>{
 								let row=table.tBody.prepend(new TableRow({table:table}));
-								let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('Atypical/MSAp/PSP');
+								let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('PD/MSAp/PSP');
 								let date_created=new Date(o.getSystemProperty("DATE_CREATED"));
 								let h=date_created.getHours();
 								if(h<10)h="0"+h;
@@ -289,7 +289,7 @@ popLayout.setPosition('left');
 
 	//We populate the pop up with GUI elements
 	popLayout.append(new Label("Product Selection"));
-	popLayout.append(new Button("Atypical/MSAp/PSP")).whenClicked().then(()=>{
+	popLayout.append(new Button("PD/MSAp/PSP")).whenClicked().then(()=>{
 		popLayout.hide();
 
 		let window=new Window();
@@ -309,7 +309,7 @@ popLayout.setPosition('left');
 					o.setFields({startDate:new Date().getTime()});
 					neuropacs_storage.add(o).then(()=>{
 							let row=table.tBody.prepend(new TableRow({table:table}));
-							let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('Atypical/MSAp/PSP');
+							let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(o).setId(job).setName(name).setProduct('PD/MSAp/PSP');
 							let date_created=new Date(o.getSystemProperty("DATE_CREATED"));
 							let h=date_created.getHours();
 							if(h<10)h="0"+h;
@@ -330,7 +330,7 @@ popLayout.setPosition('left');
 								
 						}
 
-						uploadDataset(job,dataset,"Atypical/MSAp/PSP-v1.0",(d)=>{
+						uploadDataset(job,dataset,"PD/MSAp/PSP-v1.0",(d)=>{
 							entry.setProgress(d.progress);
 							entry.setProgressComment(d.status);
 						}).then(()=>{
@@ -377,7 +377,7 @@ let load_orders=()=>{
 	for(var id in list){
 		browser_storage.getObject(id).whenReady().then((object)=>{
 			let row=table.tBody.prepend(new TableRow({table:table}));
-			let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(object).setId(id).setName(object.getSystemProperty('NAME')).setProduct('Atypical/MSAp/PSP');
+			let entry=row.setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect})).setCloudObject(object).setId(id).setName(object.getSystemProperty('NAME')).setProduct('PD/MSAp/PSP');
 			entry.autoUpdate();
 		})
 		
@@ -387,10 +387,10 @@ let load_orders=()=>{
 
 table.tBody.prepend(new TableRow({table:table}))
 .setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
-.setName('DEMO_MRI_3').setProgress(100).setProgressComment('Finished').setProduct('Atypical/MSAp/PSP').setResults({
+.setName('DEMO_MRI_3').setProgress(100).setProgressComment('Finished').setProduct('PD/MSAp/PSP').setResults({
     "orderID": "183b21a1-15cb-4882-8aec-2d6bf4cd1d4d",
-    "date": "2024-05-30",
-    "product": "Atypical/MSAp/PSP-v1.0",
+    "date": "2025-05-30",
+    "product": "PD/MSAp/PSP-v1.0",
     "result": {
         "Atypical": "0.913",
         "PSPvsMSAp": "0.944",
@@ -405,8 +405,8 @@ table.tBody.prepend(new TableRow({table:table}))
 .setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
 .setName('DEMO_MRI_2').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
     "orderID": "37562845-1a07-46be-ac86-e832e40e597e",
-    "date": "2024-05-31",
-    "product": "Atypical/MSAp/PSP-v1.0",
+    "date": "2025-05-31",
+    "product": "PD/MSAp/PSP-v1.0",
     "result": {
         "Atypical": "0.597",
         "PSPvsMSAp": "0.3177",
@@ -421,8 +421,8 @@ table.tBody.prepend(new TableRow({table:table}))
 .setCellContent(0,new NeuropacsTableEntry({windowContainer:wind.getWindowContainer(),neuropacs_connect}))
 .setName('DEMO_MRI_1').setProgress(100).setProgressComment('Finished').setProduct('PD/MSA/PSP').setResults({
     "orderID": "4ed799bb-6d80-4a1f-9639-2db6cc58a1c8",
-    "date": "2024-05-31",
-    "product": "Atypical/MSAp/PSP-v1.0",
+    "date": "2025-05-31",
+    "product": "PD/MSAp/PSP-v1.0",
     "result": {
         "Atypical": "0.216",
         "PSPvsMSAp": "0.67",
